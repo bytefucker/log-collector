@@ -1,0 +1,82 @@
+<div class="x-nav">
+  <span class="layui-breadcrumb">
+    <a href="">日志收集</a>
+    <a href="">项目管理</a>
+    <a>
+      <cite>项目列表</cite></a>
+  </span>
+  <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+    href="javascript:location.replace(location.href);" title="刷新">
+    <i class="iconfont" style="line-height:30px">&#xe6aa;</i></a>
+</div>
+<div class="x-body">
+
+  <table class="layui-table" lay-data="{url:'/project/getList',page:false,toolbar: '#toolbarproject',id:'project_list'}"
+    lay-filter="project_list">
+    <thead>
+      <tr>
+        <th lay-data="{type:'checkbox'}">ID</th>
+        <th lay-data="{field:'id', width:80, sort: true}">ID</th>
+        <th lay-data="{field:'name',width:100, sort: true}">项目名称</th>
+        <th lay-data="{field:'type', sort: true, width:100}">项目类型</th>
+        <th lay-data="{field:'createTime', sort: true, width:180,templet: '#switchTpl'}">创建时间</th>
+        <th lay-data="{field:'applyPath', sort: true, minWidth: 100}">部署路径</th>
+        <th lay-data="{fixed: 'right', title:'操作', toolbar: '#projectoption', width:150}">操作</th>
+      </tr>
+    </thead>
+  </table>
+
+</div>
+<script type="text/html" id="toolbarproject">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+  </div>
+</script>
+
+<script type="text/html" id="projectoption">
+  <a class="layui-btn layui-btn-xs" lay-event="edit">xxx</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">xxx</a>
+</script>
+
+<script>
+  layui.use('laydate', function () {
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#start' //指定元素
+    });
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#end' //指定元素
+    });
+
+
+  });
+</script>
+<script>
+  layui.use('table', function () {
+    var table = layui.table;
+
+    //头工具栏事件
+    table.on('toolbar(project_list)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      switch (obj.event) {
+        case 'getCheckData':
+          var data = checkStatus.data;
+          layer.alert(JSON.stringify(data));
+          break;
+        case 'getCheckLength':
+          var data = checkStatus.data;
+          layer.msg('选中了：' + data.length + ' 个');
+          break;
+        case 'isAll':
+          layer.msg(checkStatus.isAll ? '全选' : '未全选');
+          break;
+      };
+    });
+  });
+</script>

@@ -1,0 +1,94 @@
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="">日志收集</a>
+        <a href="">项目管理</a>
+        <a>
+            <cite>项目申请</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+        href="javascript:location.replace(location.href);" title="刷新">
+        <i class="iconfont" style="line-height:30px">&#xe6aa;</i></a>
+</div>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="pname" class="layui-form-label">
+                <span class="x-red">*</span>项目名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pname" name="pname" required="" lay-verify="text" autocomplete="off"
+                    class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>项目名称不可重复
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ptype" class="layui-form-label">
+                <span class="x-red">*</span>项目类型
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="ptype" name="type" required="" lay-verify="" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="applyPath" class="layui-form-label">
+                <span class="x-red">*</span>部署路径
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="applyPath" name="applyPath" required="" lay-verify="" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="submitProject" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                创建
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+
+        });
+
+        //监听提交
+        form.on('submit(add)', function (fdata) {
+            //console.log(fdata);
+            //发异步，把数据提交给后端
+            $.ajax({
+                type: "POST",
+                url: "/project/create",
+                dataType: "json",
+                data: fdata.field,
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.alert("项目创建成功", {
+                            icon: 6
+                        });
+                    } else {
+                        layer.alert("项目创建失败", {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function () {
+                    layer.alert("项目创建失败", {
+                        icon: 5
+                    });
+                }
+            });
+
+            return false;
+        });
+    });
+</script>

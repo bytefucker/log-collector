@@ -1,0 +1,116 @@
+<div class="x-nav">
+  <span class="layui-breadcrumb">
+    <a href="">日志收集</a>
+    <a href="">日志管理</a>
+    <a>
+      <cite>日志收集列表</cite></a>
+  </span>
+  <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+    href="javascript:location.replace(location.href);" title="刷新">
+    <i class="iconfont" style="line-height:30px">&#xe6aa;</i></a>
+</div>
+<div class="x-body">
+
+  <table class="layui-table" lay-data="{url:'/log/getList',page:false,toolbar: '#toolbarlog',id:'log_list'}"
+    lay-filter="log_list">
+    <thead>
+      <tr>
+        <th lay-data="{type:'checkbox'}">ID</th>
+        <th lay-data="{field:'id', width:80, sort: true}">ID</th>
+        <th lay-data="{field:'host',width:140, sort: true}">主机(IP)</th>
+        <th lay-data="{field:'pname', sort: true, width:120}">所属项目</th>
+        <th lay-data="{field:'topic', sort: true, width:120}">Topic</th>
+        <th lay-data="{field:'logPath', sort: true, width:160}">日志收集文件</th>
+        <th lay-data="{field:'applyPath', sort: true, width:160}">部署路径</th>
+        <th lay-data="{field:'createTime', sort: true, width:180,templet: '#switchTpl'}">创建时间</th>
+        <th lay-data="{fixed: 'right', title:'操作', toolbar: '#logoption', width:150}">操作</th>
+      </tr>
+    </thead>
+  </table>
+
+</div>
+<script type="text/html" id="toolbarlog">
+  <div class="layui-btn-container">
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+  </div>
+</script>
+
+<script type="text/html" id="logoption">
+  <!-- <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a> -->
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+  layui.use('laydate', function () {
+    var laydate = layui.laydate;
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#start' //指定元素
+    });
+
+    //执行一个laydate实例
+    laydate.render({
+      elem: '#end' //指定元素
+    });
+
+
+  });
+</script>
+<script>
+  layui.use('table', function () {
+    var table = layui.table;
+
+    //头工具栏事件
+    table.on('toolbar(log_list)', function (obj) {
+      var checkStatus = table.checkStatus(obj.config.id);
+      switch (obj.event) {
+        case 'getCheckData':
+          var data = checkStatus.data;
+          layer.alert(JSON.stringify(data));
+          break;
+        case 'getCheckLength':
+          var data = checkStatus.data;
+          layer.msg('选中了：' + data.length + ' 个');
+          break;
+        case 'isAll':
+          layer.msg(checkStatus.isAll ? '全选' : '未全选');
+          break;
+      };
+    });
+    //监听行工具事件
+    table.on('tool(log_list)', function (obj) {
+      var rdata = obj.data;
+      if (obj.event === 'del') {
+        layer.confirm('真的删除行么', function (index) {
+          layer.close(index);
+          $.ajax({
+            type: "post",
+            url: "/log/delete",
+            dataType: "json",
+            data: rdata,
+            success: function (data) {
+              if (data.code == 0) {
+                obj.del();
+                layer.alert("日志删除成功", {
+                  icon: 6
+                });
+              } else {
+                layer.alert("日志删除失败", {
+                  icon: 5
+                });
+              }
+            },
+            error: function () {
+              layer.alert("日志删除失败", {
+                icon: 5
+              });
+            }
+          });
+        });
+      }
+    });
+  });
+</script>

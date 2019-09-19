@@ -1,0 +1,104 @@
+<div class="x-nav">
+    <span class="layui-breadcrumb">
+        <a href="">日志收集</a>
+        <a href="">日志管理</a>
+        <a>
+            <cite>日志申请</cite></a>
+    </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+        href="javascript:location.replace(location.href);" title="刷新">
+        <i class="iconfont" style="line-height:30px">&#xe6aa;</i></a>
+</div>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="pname" class="layui-form-label">
+                <span class="x-red">*</span>所属项目
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="pname" name="pname" required="" lay-verify="text" autocomplete="off"
+                    class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">填写已存在的项目</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="topic" class="layui-form-label">
+                <span class="x-red">*</span>Topic
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="topic" name="topic" required="" lay-verify="" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <label for="logPath" class="layui-form-label">
+                    <span class="x-red">*</span>日志收集文件路径
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" id="topic" name="logPath" required="" lay-verify="" autocomplete="off"
+                        class="layui-input">
+                </div>
+            </div>
+        <div class="layui-form-item">
+            <label for="hosts" class="layui-form-label">
+                <span class="x-red">*</span>主机列表
+            </label>
+            <div class="layui-input-inline">
+                    <textarea name="hosts" id="hosts" placeholder="请输入IP列表，多个使用','逗号分割'" class="layui-textarea"></textarea>
+                <!-- <input type="textarea" id="hosts" name="hosts" required="" lay-verify="" autocomplete="off"
+                    class="layui-input"> -->
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="submitProject" class="layui-form-label">
+            </label>
+            <button class="layui-btn" lay-filter="add" lay-submit="">
+                创建
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+
+        });
+
+        //监听提交
+        form.on('submit(add)', function (fdata) {
+            //console.log(fdata);
+            //发异步，把数据提交给后端
+            $.ajax({
+                type: "POST",
+                url: "/log/create",
+                dataType: "json",
+                data: fdata.field,
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.alert("日志任务创建成功", {
+                            icon: 6
+                        });
+                    } else {
+                        layer.alert("日志任务创建失败", {
+                            icon: 5
+                        });
+                    }
+                },
+                error: function () {
+                    layer.alert("日志任务创建失败", {
+                        icon: 5
+                    });
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
