@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"logAgent/tailf"
 	"strings"
 	"time"
 
@@ -87,7 +86,7 @@ func etcdWatch(key string) {
 	logs.Debug("start watch key: %s", key)
 	for true {
 		rech := etcdClient.client.Watch(context.Background(), key)
-		var colConfig []tailf.Collect
+		var colConfig []Collect
 		var getConfStatus = true
 		for wresp := range rech {
 			for _, ev := range wresp.Events {
@@ -113,7 +112,7 @@ func etcdWatch(key string) {
 		}
 		logs.Info("Update tailf config")
 		// 更新tailf任务
-		err := tailf.UpdateTailfTask(colConfig)
+		err := UpdateTailfTask(colConfig)
 		if err != nil {
 			logs.Error("Update tailf task failed, connect: %s, err: %s", colConfig, err)
 		}

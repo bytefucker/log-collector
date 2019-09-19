@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"github.com/astaxie/beego/logs"
-	"logAgent/tailf"
 	"os"
 	"strings"
 
@@ -18,7 +17,7 @@ type Config struct {
 	KafkaAddress []string
 	EtcdAddress  []string
 	CollectKey   string
-	Collects     []tailf.Collect
+	Collects     []Collect
 	Ip           string
 }
 

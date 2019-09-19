@@ -1,9 +1,6 @@
 package main
 
 import (
-	"logAgent/kafka"
-	"logAgent/tailf"
-
 	"github.com/astaxie/beego/logs"
 )
 
@@ -48,7 +45,7 @@ func main() {
 	logs.Debug("Init Agent [etcd] success")
 
 	// 初始化tailf
-	err = tailf.InitTailf(agentConfig.Collects, agentConfig.Chansize, agentConfig.Ip)
+	err = initTailf(agentConfig.Collects, agentConfig.Chansize, agentConfig.Ip)
 	if err != nil {
 		logs.Error("Start logAgent [init tailf] failed, err:", err)
 		return
@@ -56,7 +53,7 @@ func main() {
 	logs.Debug("Init Agent [tailf] success")
 
 	// 初始化kafka
-	err = kafka.InitKafka(agentConfig.KafkaAddress)
+	err = initKafka(agentConfig.KafkaAddress)
 	if err != nil {
 		logs.Error("Start logAgent [init kafka] failed, err:", err)
 		return

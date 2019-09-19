@@ -1,4 +1,4 @@
-package tailf
+package main
 
 import (
 	"sync"
@@ -54,7 +54,7 @@ var (
 )
 
 // 初始化tailf
-func InitTailf(collects []Collect, chanSize int, ip string) (err error) {
+func initTailf(collects []Collect, chanSize int, ip string) (err error) {
 	tailObjMgr = &TailsObjMgr{
 		msgChan: make(chan *TextMsg, chanSize),
 	}
