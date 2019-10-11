@@ -27,7 +27,6 @@ var (
 
 // 初始化etcd
 func InitEtcd(agentConfig *model.Config) (err error) {
-
 	client, err := etcd.New(etcd.Config{
 		Endpoints:   agentConfig.EtcdAddress,
 		DialTimeout: 5 * time.Second,
@@ -72,7 +71,7 @@ func InitEtcd(agentConfig *model.Config) (err error) {
 		logs.Debug("log agent collect is: %v", agentConfig.CollectTasks)
 	}
 	// 初始化etcd key监控
-	initEtcdWatch()
+	//initEtcdWatch()
 	return
 }
 

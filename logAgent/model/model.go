@@ -18,9 +18,8 @@ type Config struct {
 	Ip           string
 }
 
-
 type CollectTask struct {
-	Topic   string `json:"topic"`
+	AppKey  string `json:"appKey"`
 	LogPath string `json:"logPath"`
 }
 
@@ -30,8 +29,8 @@ type LogContent struct {
 }
 
 type LogTextMsg struct {
-	Msg   LogContent
-	Topic string
+	Msg    LogContent
+	AppKey string
 }
 
 type TailTask struct {

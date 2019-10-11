@@ -51,19 +51,19 @@ func createTask(collectTask model.CollectTask) {
 		Collect:  collectTask,
 		ExitChan: make(chan int, 1),
 	}
-	go readFromTail(tailObj, collectTask.Topic)
+	go readFromTail(tailObj, collectTask.AppKey)
 	tailObjMgr.TailObjs = append(tailObjMgr.TailObjs, tailObj)
 }
 
 
 // 读取监听日志文件的内容
-func readFromTail(tailObj *model.TailTask, topic string) {
+func readFromTail(tailObj *model.TailTask, appKey string) {
 	for true {
 		select {
 		// 任务正常运行
 		case lineMsg, ok := <-tailObj.TailObj.Lines:
 			if !ok {
-				logs.Warn("read obj:[%v] topic:[%v] filed continue", tailObj, topic)
+				logs.Warn("read obj:[%v] topic:[%v] filed continue", tailObj, appKey)
 				continue
 			}
 			// 消息为空跳过
@@ -75,8 +75,8 @@ func readFromTail(tailObj *model.TailTask, topic string) {
 				Ip:  hostIp,
 			}
 			msgObj := &model.LogTextMsg{
-				Msg:   kfMsg,
-				Topic: topic,
+				Msg:    kfMsg,
+				AppKey: appKey,
 			}
 			tailObjMgr.MsgChan <- msgObj
 		// 任务退出
