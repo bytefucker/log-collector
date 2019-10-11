@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/astaxie/beego/logs"
 	"logAgent/config"
+	"logAgent/model"
 	"logAgent/producer"
 	"logAgent/server"
 	"logAgent/task"
@@ -12,7 +13,7 @@ import (
 var (
 	configType  = "ini"
 	configPath  string
-	agentConfig *config.Config
+	agentConfig *model.Config
 )
 
 func main() {
@@ -46,27 +47,26 @@ func main() {
 		return
 	}
 
-	// 初始化kafka
-	/*_, err = config.InitKafka(agentConfig)
-	if err != nil {
-		logs.Error("初始化kafka失败，%s", err)
-		return
-	}*/
-
-	// 初始化tailf task
+	// 初始化task
 	err = task.InitTailfTask(agentConfig)
 	if err != nil {
 		logs.Error("初始化tailf tasks失败", err)
 		return
 	}
 
+	//初始化producer
+	pr, err := producer.InitProducer(agentConfig)
+	if err != nil {
+		logs.Error("初始化producer失败", err)
+		return
+	}
+
 	// 启动logagent服务
-	err = server.ServerRun(producer.HttpProducer{})
+	err = server.ServerRun(pr)
 	if err != nil {
 		logs.Error("启动logagent服务失败", err)
 		return
 	}
-	logs.Info("LogAgent退出")
 }
 
 // 通过传参的方式获取配置文件的路径

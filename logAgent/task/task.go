@@ -2,7 +2,6 @@ package task
 
 import (
 	"github.com/astaxie/beego/logs"
-	"logAgent/config"
 	"logAgent/model"
 
 	"github.com/hpcloud/tail"
@@ -19,7 +18,7 @@ var (
 )
 
 //初始化收集任务
-func InitTailfTask(agentConfig *config.Config) (err error) {
+func InitTailfTask(agentConfig *model.Config) (err error) {
 	tailObjMgr = &model.TailsTaskMgr{
 		MsgChan: make(chan *model.LogTextMsg, agentConfig.ChanSize),
 	}

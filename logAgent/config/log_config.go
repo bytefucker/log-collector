@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"logAgent/model"
 
 	"github.com/astaxie/beego/logs"
 )
@@ -24,7 +25,7 @@ func caseLogLevel(level string) (logLevel int) {
 }
 
 // 初始化日志
-func InitAgentLog(agentConfig *Config) (err error) {
+func InitAgentLog(agentConfig *model.Config) (err error) {
 	logConfig := make(map[string]interface{})
 	logConfig["filename"] = agentConfig.LogPath
 	logConfig["level"] = caseLogLevel(agentConfig.LogLevel)

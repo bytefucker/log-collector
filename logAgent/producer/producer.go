@@ -12,6 +12,17 @@ type Producer interface {
 	SendMsg(topic string, msg model.LogContent) error
 }
 
+//初始化producer
+func InitProducer(agentConfig *model.Config) (producer Producer, err error) {
+	switch agentConfig.SendModel {
+	case "http":
+		producer = HttpProducer{}
+	case "kafka":
+		producer = KafkaProducer{}
+	}
+	return
+}
+
 //Http消费者
 type HttpProducer struct{}
 

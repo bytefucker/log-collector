@@ -8,26 +8,15 @@ import (
 	"github.com/astaxie/beego/config"
 )
 
-// 存储logAgent配置信息
-type Config struct {
-	LogLevel     string
-	LogPath      string
-	ChanSize     int
-	SendModel    string //发送方式
-	KafkaAddress []string
-	EtcdAddress  []string
-	CollectKey   string
-	CollectTasks []model.CollectTask
-	Ip           string
-}
+
 
 // 加载配置信息
-func LoadConfig(configType, configPath string) (agentConfig *Config, err error) {
+func LoadConfig(configType, configPath string) (agentConfig *model.Config, err error) {
 	conf, err := config.NewConfig(configType, configPath)
 	if err != nil {
 		return
 	}
-	agentConfig = &Config{}
+	agentConfig = &model.Config{}
 	// 获取基础配置
 	err = parseAgentConfig(agentConfig, conf)
 	if err != nil {
@@ -37,7 +26,7 @@ func LoadConfig(configType, configPath string) (agentConfig *Config, err error) 
 }
 
 //解析配置文件
-func parseAgentConfig(agentConfig *Config, conf config.Configer) (err error) {
+func parseAgentConfig(agentConfig *model.Config, conf config.Configer) (err error) {
 	// 获取日志级别
 	logLevel := conf.String("base::log_level")
 	if len(logLevel) == 0 {

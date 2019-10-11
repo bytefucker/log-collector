@@ -5,6 +5,20 @@ import (
 	"sync"
 )
 
+// 存储logAgent配置信息
+type Config struct {
+	LogLevel     string
+	LogPath      string
+	ChanSize     int
+	SendModel    string //发送方式
+	KafkaAddress []string
+	EtcdAddress  []string
+	CollectKey   string
+	CollectTasks []CollectTask
+	Ip           string
+}
+
+
 type CollectTask struct {
 	Topic   string `json:"topic"`
 	LogPath string `json:"logPath"`

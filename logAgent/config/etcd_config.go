@@ -26,7 +26,7 @@ var (
 )
 
 // 初始化etcd
-func InitEtcd(agentConfig *Config) (err error) {
+func InitEtcd(agentConfig *model.Config) (err error) {
 
 	client, err := etcd.New(etcd.Config{
 		Endpoints:   agentConfig.EtcdAddress,
