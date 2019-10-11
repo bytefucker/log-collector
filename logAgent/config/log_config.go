@@ -24,7 +24,7 @@ func caseLogLevel(level string) (logLevel int) {
 }
 
 // 初始化日志
-func InitAgentLog() (err error) {
+func InitAgentLog(agentConfig *Config) (err error) {
 	logConfig := make(map[string]interface{})
 	logConfig["filename"] = agentConfig.LogPath
 	logConfig["level"] = caseLogLevel(agentConfig.LogLevel)

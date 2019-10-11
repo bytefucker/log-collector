@@ -1,9 +1,9 @@
 package task
 
 import (
-	"sync"
-
 	"github.com/astaxie/beego/logs"
+	"logAgent/config"
+	"logAgent/model"
 
 	"github.com/hpcloud/tail"
 )
@@ -13,57 +13,30 @@ const (
 	StatusDelete = 2
 )
 
-type CollectTask struct {
-	Topic   string `json:"topic"`
-	LogPath string `json:"logPath"`
-}
-
-type LogContent struct {
-	Msg string `json:"msg"`
-	Ip  string `json:"ip"`
-}
-
-type LogTextMsg struct {
-	Msg   LogContent
-	Topic string
-}
-
-type TailTask struct {
-	tailObj  *tail.Tail
-	collect  CollectTask
-	status   int
-	exitChan chan int
-}
-
-type TailsTaskMgr struct {
-	tailObjs []*TailTask
-	msgChan  chan *LogTextMsg
-	lock     sync.Mutex
-}
-
 var (
-	tailObjMgr *TailsTaskMgr
+	tailObjMgr *model.TailsTaskMgr
 	hostIp     string
 )
 
 //初始化收集任务
-func InitTailfTask(collectTasks []CollectTask, chanSize int, ip string) (err error) {
-	tailObjMgr = &TailsTaskMgr{
-		msgChan: make(chan *LogTextMsg, chanSize),
+func InitTailfTask(agentConfig *config.Config) (err error) {
+	tailObjMgr = &model.TailsTaskMgr{
+		MsgChan: make(chan *model.LogTextMsg, agentConfig.ChanSize),
 	}
-	if len(collectTasks) == 0 {
+	if len(agentConfig.CollectTasks) == 0 {
 		logs.Warn("没有收集任务")
 	}
-	hostIp = ip
+	hostIp = agentConfig.Ip
 
-	for _, v := range collectTasks {
+	for _, v := range agentConfig.CollectTasks {
 		createTask(v)
 	}
 	return
 }
 
+
 //创建一个收集任务
-func createTask(collectTask CollectTask) {
+func createTask(collectTask model.CollectTask) {
 	obj, err := tail.TailFile(collectTask.LogPath, tail.Config{
 		ReOpen: true,
 		Follow: true,
@@ -74,21 +47,22 @@ func createTask(collectTask CollectTask) {
 	if err != nil {
 		logs.Warn("收集任务[%v]创建失败, %v", collectTask.LogPath, err)
 	}
-	tailObj := &TailTask{
-		tailObj:  obj,
-		collect:  collectTask,
-		exitChan: make(chan int, 1),
+	tailObj := &model.TailTask{
+		TailObj:  obj,
+		Collect:  collectTask,
+		ExitChan: make(chan int, 1),
 	}
 	go readFromTail(tailObj, collectTask.Topic)
-	tailObjMgr.tailObjs = append(tailObjMgr.tailObjs, tailObj)
+	tailObjMgr.TailObjs = append(tailObjMgr.TailObjs, tailObj)
 }
 
+
 // 读取监听日志文件的内容
-func readFromTail(tailObj *TailTask, topic string) {
+func readFromTail(tailObj *model.TailTask, topic string) {
 	for true {
 		select {
 		// 任务正常运行
-		case lineMsg, ok := <-tailObj.tailObj.Lines:
+		case lineMsg, ok := <-tailObj.TailObj.Lines:
 			if !ok {
 				logs.Warn("read obj:[%v] topic:[%v] filed continue", tailObj, topic)
 				continue
@@ -97,38 +71,38 @@ func readFromTail(tailObj *TailTask, topic string) {
 			if lineMsg.Text == "" {
 				continue
 			}
-			kfMsg := LogContent{
+			kfMsg := model.LogContent{
 				Msg: lineMsg.Text,
 				Ip:  hostIp,
 			}
-			msgObj := &LogTextMsg{
+			msgObj := &model.LogTextMsg{
 				Msg:   kfMsg,
 				Topic: topic,
 			}
-			tailObjMgr.msgChan <- msgObj
+			tailObjMgr.MsgChan <- msgObj
 		// 任务退出
-		case <-tailObj.exitChan:
-			logs.Warn("收集任务退出[%v]", tailObj.collect)
+		case <-tailObj.ExitChan:
+			logs.Warn("收集任务退出[%v]", tailObj.Collect)
 			return
 		}
 	}
 }
 
 // 从chan中获取一行数据
-func GetOneLine() (msg *LogTextMsg) {
-	msg = <-tailObjMgr.msgChan
+func GetOneLine() (msg *model.LogTextMsg) {
+	msg = <-tailObjMgr.MsgChan
 	return
 }
 
 // 更新tailf任务
-func UpdateTailfTask(collectConfig []CollectTask) (err error) {
-	tailObjMgr.lock.Lock()
-	defer tailObjMgr.lock.Unlock()
+func UpdateTailfTask(collectConfig []model.CollectTask) (err error) {
+	tailObjMgr.Lock.Lock()
+	defer tailObjMgr.Lock.Unlock()
 	for _, newColl := range collectConfig {
 		// 判断tailf运行状态，是否存在
 		var isRunning = false
-		for _, oldTailObj := range tailObjMgr.tailObjs {
-			if newColl.LogPath == oldTailObj.collect.LogPath {
+		for _, oldTailObj := range tailObjMgr.TailObjs {
+			if newColl.LogPath == oldTailObj.Collect.LogPath {
 				isRunning = true
 				break
 			}
@@ -140,21 +114,21 @@ func UpdateTailfTask(collectConfig []CollectTask) (err error) {
 	}
 
 	// 更新tailf任务管理列表内容
-	var tailObjs []*TailTask
-	for _, oldTailObj := range tailObjMgr.tailObjs {
-		oldTailObj.status = StatusDelete
+	var tailObjs []*model.TailTask
+	for _, oldTailObj := range tailObjMgr.TailObjs {
+		oldTailObj.Status = StatusDelete
 		for _, newColl := range collectConfig {
-			if newColl.LogPath == oldTailObj.collect.LogPath {
-				oldTailObj.status = StatusNormal
+			if newColl.LogPath == oldTailObj.Collect.LogPath {
+				oldTailObj.Status = StatusNormal
 				break
 			}
 		}
-		if oldTailObj.status == StatusDelete {
-			oldTailObj.exitChan <- 1
+		if oldTailObj.Status == StatusDelete {
+			oldTailObj.ExitChan <- 1
 			continue
 		}
 		tailObjs = append(tailObjs, oldTailObj)
 	}
-	tailObjMgr.tailObjs = tailObjs
+	tailObjMgr.TailObjs = tailObjs
 	return
 }

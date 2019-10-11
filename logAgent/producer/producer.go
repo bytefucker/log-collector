@@ -1,46 +1,33 @@
 package producer
 
 import (
-	"fmt"
-
-	"github.com/Shopify/sarama"
+	"encoding/json"
 	"github.com/astaxie/beego/logs"
+	"logAgent/model"
 )
 
-var (
-	// kafka生产者对象
-	kafkaServerClient sarama.SyncProducer
-)
+//消费者接口
+type Producer interface {
+	//发送消息
+	SendMsg(topic string, msg model.LogContent) error
+}
 
-// 初始化kafka生产者
-func InitKafka(address []string) (err error) {
-	kafkaServerConf := sarama.NewConfig()
-	kafkaServerConf.Producer.RequiredAcks = sarama.WaitForAll
-	kafkaServerConf.Producer.Partitioner = sarama.NewRandomPartitioner
-	kafkaServerConf.Producer.Return.Successes = true
+//Http消费者
+type HttpProducer struct{}
 
-	kafkaServerClient, err = sarama.NewSyncProducer(address, kafkaServerConf)
+func (HttpProducer) SendMsg(topic string, msg model.LogContent) (err error) {
+	json, err := json.Marshal(&msg)
 	if err != nil {
-		fmt.Println("producer create failed,", err)
+		logs.Error("send to http marshal failed --> msg: [%v], topic:[%s], error: %s", msg, topic, err)
 		return
 	}
-
+	logs.Debug("send to http --> msg:[%v], topic:[%v]", string(json), topic)
 	return
 }
 
-// 发送消息到kafka
-func SendMsgToKafka(msg, topic string) (err error) {
-	msgobj := &sarama.ProducerMessage{}
-	msgobj.Topic = topic
-	msgobj.Value = sarama.StringEncoder(msg)
+//Kafka消费者
+type KafkaProducer struct{}
 
-	pid, offset, err := kafkaServerClient.SendMessage(msgobj)
-
-	if err != nil {
-		logs.Error("send msg to kafka topic:[%v] msg:[%v] faile, %v", msg, topic, err)
-		return
-	}
-
-	logs.Debug("topic: [%v] pid: [%v], offset: [%v]", topic, pid, offset)
-	return
+func (KafkaProducer) SendMsg(topic string, msg model.LogContent) (err error) {
+	panic("implement me")
 }

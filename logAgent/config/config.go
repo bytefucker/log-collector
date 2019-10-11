@@ -2,7 +2,7 @@ package config
 
 import (
 	"errors"
-	"logAgent/task"
+	"logAgent/model"
 	"strings"
 
 	"github.com/astaxie/beego/config"
@@ -12,38 +12,32 @@ import (
 type Config struct {
 	LogLevel     string
 	LogPath      string
-	Chansize     int
+	ChanSize     int
+	SendModel    string //发送方式
 	KafkaAddress []string
 	EtcdAddress  []string
 	CollectKey   string
-	Collects     []task.CollectTask
+	CollectTasks []model.CollectTask
 	Ip           string
 }
 
-var (
-	// 配置信息对象
-	agentConfig *Config
-)
-
 // 加载配置信息
-func LoadConfig(configType, configPath string) (err error) {
+func LoadConfig(configType, configPath string) (agentConfig *Config, err error) {
 	conf, err := config.NewConfig(configType, configPath)
 	if err != nil {
 		return
 	}
-
 	agentConfig = &Config{}
-
 	// 获取基础配置
-	err = getAgentConfig(conf)
+	err = parseAgentConfig(agentConfig, conf)
 	if err != nil {
 		return
 	}
-
-	return
+	return agentConfig, nil
 }
 
-func getAgentConfig(conf config.Configer) (err error) {
+//解析配置文件
+func parseAgentConfig(agentConfig *Config, conf config.Configer) (err error) {
 	// 获取日志级别
 	logLevel := conf.String("base::log_level")
 	if len(logLevel) == 0 {
@@ -54,16 +48,23 @@ func getAgentConfig(conf config.Configer) (err error) {
 	// 获取日志路径
 	logPath := conf.String("base::log_path")
 	if len(logPath) == 0 {
-		logPath = "/Users/aery/Data/code/Go/go_old/logs/logagent.log"
+		logPath = "logs/logagent.log"
 	}
 	agentConfig.LogPath = logPath
+
+	sendModel := conf.String("base::send_model")
+	if len(sendModel) == 0 {
+		err = errors.New("Agent config sendModel error")
+		return
+	}
+	agentConfig.SendModel = sendModel
 
 	// 日志收集开启chan大小
 	chanSize, chanStatus := conf.Int("base::queue_size")
 	if chanStatus != nil {
 		chanSize = 200
 	}
-	agentConfig.Chansize = chanSize
+	agentConfig.ChanSize = chanSize
 
 	// etcd 地址
 	etcdAddress := conf.String("etcd::etcd_address")
@@ -91,4 +92,3 @@ func getAgentConfig(conf config.Configer) (err error) {
 
 	return
 }
-

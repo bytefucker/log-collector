@@ -21,58 +21,52 @@ func main() {
 	// 获取配置文件路径
 	err = getConfigPath()
 	if err != nil {
-		logs.Error("%s", err)
+		logs.Error("获取配置文件路径失败，%s", err)
 		return
 	}
-	logs.Debug("get config file success, file: %s", configPath)
 
 	// 加载配置文件
-	err = config.LoadConfig(configType, configPath)
+	agentConfig, err := config.LoadConfig(configType, configPath)
 	if err != nil {
-		logs.Error("Start logAgent [init loadConfig] failed, err: %s", err)
+		logs.Error("配置文件加载失败, %s", err)
 		return
 	}
-	logs.Debug("load Agent [config] success")
 
 	// 初始化日志
-	err = config.InitAgentLog()
+	err = config.InitAgentLog(agentConfig)
 	if err != nil {
-		logs.Error("Start logAgent [init agentLog] failed, err: %s", err)
+		logs.Error("初始化日志失败,%s", err)
 		return
 	}
-	logs.Debug("Init Agent [log] success")
 
 	// 初始化Etcd
-	err = config.InitEtcd(agentConfig.EtcdAddress, agentConfig.CollectKey)
+	err = config.InitEtcd(agentConfig)
 	if err != nil {
-		logs.Error("Start logAgent [init etcd] failed, err:", err)
+		logs.Error("初始化etcd失败，%s", err)
 		return
 	}
-	logs.Debug("Init Agent [etcd] success")
-
-	// 初始化tailf
-	err = task.InitTailfTask(agentConfig.Collects, agentConfig.Chansize, agentConfig.Ip)
-	if err != nil {
-		logs.Error("Start logAgent [init task] failed, err:", err)
-		return
-	}
-	logs.Debug("Init Agent [task] success")
 
 	// 初始化kafka
-	err = producer.InitKafka(agentConfig.KafkaAddress)
+	/*_, err = config.InitKafka(agentConfig)
 	if err != nil {
-		logs.Error("Start logAgent [init kafka] failed, err:", err)
+		logs.Error("初始化kafka失败，%s", err)
+		return
+	}*/
+
+	// 初始化tailf task
+	err = task.InitTailfTask(agentConfig)
+	if err != nil {
+		logs.Error("初始化tailf tasks失败", err)
 		return
 	}
-	logs.Debug("Init Agent [kafka] success")
 
 	// 启动logagent服务
-	err = server.ServerRun()
+	err = server.ServerRun(producer.HttpProducer{})
 	if err != nil {
-		logs.Error("Start logAgent [init serverRun] failed, err:", err)
+		logs.Error("启动logagent服务失败", err)
 		return
 	}
-	logs.Info("Log Agent exit")
+	logs.Info("LogAgent退出")
 }
 
 // 通过传参的方式获取配置文件的路径

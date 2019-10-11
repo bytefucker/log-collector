@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"logAgent/task"
+	"logAgent/model"
 	"strings"
 	"time"
 
@@ -26,9 +26,10 @@ var (
 )
 
 // 初始化etcd
-func InitEtcd(etcdAddress []string, collectKey string) (err error) {
+func InitEtcd(agentConfig *Config) (err error) {
+
 	client, err := etcd.New(etcd.Config{
-		Endpoints:   etcdAddress,
+		Endpoints:   agentConfig.EtcdAddress,
 		DialTimeout: 5 * time.Second,
 	})
 
@@ -39,13 +40,13 @@ func InitEtcd(etcdAddress []string, collectKey string) (err error) {
 		client: client,
 	}
 
-	if strings.HasSuffix(collectKey, "/") == false {
-		collectKey = fmt.Sprintf("%s/", collectKey)
+	if strings.HasSuffix(agentConfig.CollectKey, "/") == false {
+		agentConfig.CollectKey = fmt.Sprintf("%s/", agentConfig.CollectKey)
 	}
 
 	// 通过本地ip和配置文件中的前缀值获取etcd中真正的数据值
 	for _, ip := range utils.LocalIpArray {
-		etcdKey := fmt.Sprintf("%s%s", collectKey, ip)
+		etcdKey := fmt.Sprintf("%s%s", agentConfig.CollectKey, ip)
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		resp, err := etcdClient.client.Get(ctx, etcdKey)
@@ -59,7 +60,7 @@ func InitEtcd(etcdAddress []string, collectKey string) (err error) {
 
 		for _, v := range resp.Kvs {
 			if string(v.Key) == etcdKey {
-				err = json.Unmarshal(v.Value, &agentConfig.Collects)
+				err = json.Unmarshal(v.Value, &agentConfig.CollectTasks)
 				if err != nil {
 					logs.Warn("json Unmarshal key: %s failed, err: %s", v.Key, err)
 					continue
@@ -68,7 +69,7 @@ func InitEtcd(etcdAddress []string, collectKey string) (err error) {
 				agentConfig.Ip = ip
 			}
 		}
-		logs.Debug("log agent collect is: %v", agentConfig.Collects)
+		logs.Debug("log agent collect is: %v", agentConfig.CollectTasks)
 	}
 	// 初始化etcd key监控
 	initEtcdWatch()
@@ -87,7 +88,7 @@ func etcdWatch(key string) {
 	logs.Debug("start watch key: %s", key)
 	for true {
 		rech := etcdClient.client.Watch(context.Background(), key)
-		var colConfig []task.CollectTask
+		var colConfig []model.CollectTask
 		var getConfStatus = true
 		for wresp := range rech {
 			for _, ev := range wresp.Events {
@@ -113,9 +114,9 @@ func etcdWatch(key string) {
 		}
 		logs.Info("Update task config")
 		// 更新tailf任务
-		err := task.UpdateTailfTask(colConfig)
+		/*err := task.UpdateTailfTask(colConfig)
 		if err != nil {
 			logs.Error("Update task task failed, connect: %s, err: %s", colConfig, err)
-		}
+		}*/
 	}
 }
