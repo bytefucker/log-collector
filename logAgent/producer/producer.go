@@ -1,4 +1,4 @@
-package main
+package producer
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ var (
 )
 
 // 初始化kafka生产者
-func initKafka(address []string) (err error) {
+func InitKafka(address []string) (err error) {
 	kafkaServerConf := sarama.NewConfig()
 	kafkaServerConf.Producer.RequiredAcks = sarama.WaitForAll
 	kafkaServerConf.Producer.Partitioner = sarama.NewRandomPartitioner

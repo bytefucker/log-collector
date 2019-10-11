@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 var (
 	// 本地IP
-	localIpArray []string
+	LocalIpArray []string
 )
 
 // 获取本地所有ip
@@ -19,7 +19,7 @@ func init() {
 	for _, addr := range addrs {
 		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 			if ipnet.IP.To4() != nil {
-				localIpArray = append(localIpArray, ipnet.IP.String())
+				LocalIpArray = append(LocalIpArray, ipnet.IP.String())
 			}
 		}
 	}

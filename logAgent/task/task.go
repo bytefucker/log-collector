@@ -1,4 +1,4 @@
-package main
+package task
 
 import (
 	"sync"
@@ -13,69 +13,58 @@ const (
 	StatusDelete = 2
 )
 
-// 日志收集任务定义
-type Collect struct {
+type CollectTask struct {
 	Topic   string `json:"topic"`
 	LogPath string `json:"logPath"`
 }
 
-// 发送到kafka的消息
-type KafkaMsg struct {
-	// Msg *tail.Line `json:"msg"`
+type LogContent struct {
 	Msg string `json:"msg"`
 	Ip  string `json:"ip"`
 }
 
-// 发送消息结构体
-type TextMsg struct {
-	Msg   KafkaMsg
+type LogTextMsg struct {
+	Msg   LogContent
 	Topic string
 }
 
-// tailf任务对象
-type TailObj struct {
-	tailobj  *tail.Tail
-	collect  Collect
+type TailTask struct {
+	tailObj  *tail.Tail
+	collect  CollectTask
 	status   int
 	exitChan chan int
 }
 
-// tailf任务对象管理
-type TailsObjMgr struct {
-	tailObjs []*TailObj
-	msgChan  chan *TextMsg
+type TailsTaskMgr struct {
+	tailObjs []*TailTask
+	msgChan  chan *LogTextMsg
 	lock     sync.Mutex
 }
 
 var (
-	//初始化tailf任务对象管理
-	tailObjMgr *TailsObjMgr
+	tailObjMgr *TailsTaskMgr
 	hostIp     string
 )
 
-// 初始化tailf
-func initTailf(collects []Collect, chanSize int, ip string) (err error) {
-	tailObjMgr = &TailsObjMgr{
-		msgChan: make(chan *TextMsg, chanSize),
+//初始化收集任务
+func InitTailfTask(collectTasks []CollectTask, chanSize int, ip string) (err error) {
+	tailObjMgr = &TailsTaskMgr{
+		msgChan: make(chan *LogTextMsg, chanSize),
 	}
-
-	if len(collects) == 0 {
-		// err = errors.New("collect task is nill")
-		logs.Warn("collect task is nill")
+	if len(collectTasks) == 0 {
+		logs.Warn("没有收集任务")
 	}
-
 	hostIp = ip
 
-	// 创建tailf task
-	for _, v := range collects {
+	for _, v := range collectTasks {
 		createTask(v)
 	}
 	return
 }
 
-// 创建tailf task
-func createTask(collect Collect) {
-	obj, err := tail.TailFile(collect.LogPath, tail.Config{
+//创建一个收集任务
+func createTask(collectTask CollectTask) {
+	obj, err := tail.TailFile(collectTask.LogPath, tail.Config{
 		ReOpen: true,
 		Follow: true,
 		// Location:  &tail.SeekInfo{Offset: 0, Whence: 2},
@@ -83,24 +72,23 @@ func createTask(collect Collect) {
 		Poll:      true,
 	})
 	if err != nil {
-		logs.Warn("tailf create [%v] failed, %v", collect.LogPath, err)
+		logs.Warn("收集任务[%v]创建失败, %v", collectTask.LogPath, err)
 	}
-	tailObj := &TailObj{
-		tailobj:  obj,
-		collect:  collect,
+	tailObj := &TailTask{
+		tailObj:  obj,
+		collect:  collectTask,
 		exitChan: make(chan int, 1),
 	}
-	// 开启goroute去读取监听日志的内容
-	go readFromTail(tailObj, collect.Topic)
+	go readFromTail(tailObj, collectTask.Topic)
 	tailObjMgr.tailObjs = append(tailObjMgr.tailObjs, tailObj)
 }
 
 // 读取监听日志文件的内容
-func readFromTail(tailObj *TailObj, topic string) {
+func readFromTail(tailObj *TailTask, topic string) {
 	for true {
 		select {
 		// 任务正常运行
-		case lineMsg, ok := <-tailObj.tailobj.Lines:
+		case lineMsg, ok := <-tailObj.tailObj.Lines:
 			if !ok {
 				logs.Warn("read obj:[%v] topic:[%v] filed continue", tailObj, topic)
 				continue
@@ -109,31 +97,31 @@ func readFromTail(tailObj *TailObj, topic string) {
 			if lineMsg.Text == "" {
 				continue
 			}
-			kfMsg := KafkaMsg{
+			kfMsg := LogContent{
 				Msg: lineMsg.Text,
 				Ip:  hostIp,
 			}
-			msgObj := &TextMsg{
+			msgObj := &LogTextMsg{
 				Msg:   kfMsg,
 				Topic: topic,
 			}
 			tailObjMgr.msgChan <- msgObj
 		// 任务退出
 		case <-tailObj.exitChan:
-			logs.Warn("tail obj will exited, conf:%v", tailObj.collect)
+			logs.Warn("收集任务退出[%v]", tailObj.collect)
 			return
 		}
 	}
 }
 
 // 从chan中获取一行数据
-func GetOneLine() (msg *TextMsg) {
+func GetOneLine() (msg *LogTextMsg) {
 	msg = <-tailObjMgr.msgChan
 	return
 }
 
 // 更新tailf任务
-func UpdateTailfTask(collectConfig []Collect) (err error) {
+func UpdateTailfTask(collectConfig []CollectTask) (err error) {
 	tailObjMgr.lock.Lock()
 	defer tailObjMgr.lock.Unlock()
 	for _, newColl := range collectConfig {
@@ -152,7 +140,7 @@ func UpdateTailfTask(collectConfig []Collect) (err error) {
 	}
 
 	// 更新tailf任务管理列表内容
-	var tailObjs []*TailObj
+	var tailObjs []*TailTask
 	for _, oldTailObj := range tailObjMgr.tailObjs {
 		oldTailObj.status = StatusDelete
 		for _, newColl := range collectConfig {
@@ -168,6 +156,5 @@ func UpdateTailfTask(collectConfig []Collect) (err error) {
 		tailObjs = append(tailObjs, oldTailObj)
 	}
 	tailObjMgr.tailObjs = tailObjs
-
 	return
 }

@@ -1,16 +1,17 @@
-package main
+package config
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"logAgent/task"
 	"strings"
 	"time"
 
 	"github.com/astaxie/beego/logs"
-
 	etcd "github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
+	"logAgent/utils"
 )
 
 // etcd客户端对象
@@ -25,7 +26,7 @@ var (
 )
 
 // 初始化etcd
-func initEtcd(etcdAddress []string, collectKey string) (err error) {
+func InitEtcd(etcdAddress []string, collectKey string) (err error) {
 	client, err := etcd.New(etcd.Config{
 		Endpoints:   etcdAddress,
 		DialTimeout: 5 * time.Second,
@@ -43,7 +44,7 @@ func initEtcd(etcdAddress []string, collectKey string) (err error) {
 	}
 
 	// 通过本地ip和配置文件中的前缀值获取etcd中真正的数据值
-	for _, ip := range localIpArray {
+	for _, ip := range utils.LocalIpArray {
 		etcdKey := fmt.Sprintf("%s%s", collectKey, ip)
 
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
@@ -86,7 +87,7 @@ func etcdWatch(key string) {
 	logs.Debug("start watch key: %s", key)
 	for true {
 		rech := etcdClient.client.Watch(context.Background(), key)
-		var colConfig []Collect
+		var colConfig []task.CollectTask
 		var getConfStatus = true
 		for wresp := range rech {
 			for _, ev := range wresp.Events {
@@ -110,11 +111,11 @@ func etcdWatch(key string) {
 				break
 			}
 		}
-		logs.Info("Update tailf config")
+		logs.Info("Update task config")
 		// 更新tailf任务
-		err := UpdateTailfTask(colConfig)
+		err := task.UpdateTailfTask(colConfig)
 		if err != nil {
-			logs.Error("Update tailf task failed, connect: %s, err: %s", colConfig, err)
+			logs.Error("Update task task failed, connect: %s, err: %s", colConfig, err)
 		}
 	}
 }

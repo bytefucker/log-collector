@@ -1,9 +1,8 @@
-package main
+package config
 
 import (
 	"errors"
-	"github.com/astaxie/beego/logs"
-	"os"
+	"logAgent/task"
 	"strings"
 
 	"github.com/astaxie/beego/config"
@@ -17,7 +16,7 @@ type Config struct {
 	KafkaAddress []string
 	EtcdAddress  []string
 	CollectKey   string
-	Collects     []Collect
+	Collects     []task.CollectTask
 	Ip           string
 }
 
@@ -27,7 +26,7 @@ var (
 )
 
 // 加载配置信息
-func loadConfig(configType, configPath string) (err error) {
+func LoadConfig(configType, configPath string) (err error) {
 	conf, err := config.NewConfig(configType, configPath)
 	if err != nil {
 		return
@@ -93,14 +92,3 @@ func getAgentConfig(conf config.Configer) (err error) {
 	return
 }
 
-// 通过传参的方式获取配置文件的路径
-func getConfigPath() (err error) {
-	cmdArgs := os.Args
-	if len(cmdArgs) < 2 {
-		logs.Warn("配置加载失败，默认加载config/logagent.ini")
-		configPath = "config/logagent.ini"
-	} else {
-		configPath = cmdArgs[1]
-	}
-	return
-}

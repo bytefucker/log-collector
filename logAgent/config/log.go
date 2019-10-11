@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"encoding/json"
@@ -24,20 +24,17 @@ func caseLogLevel(level string) (logLevel int) {
 }
 
 // 初始化日志
-func initAgentLog() (err error) {
+func InitAgentLog() (err error) {
 	logConfig := make(map[string]interface{})
 	logConfig["filename"] = agentConfig.LogPath
 	logConfig["level"] = caseLogLevel(agentConfig.LogLevel)
 	logConfig["color"] = true
-
 	logConfigString, err := json.Marshal(logConfig)
 	if err != nil {
 		return
 	}
-
 	logs.SetLogger(logs.AdapterConsole, string(logConfigString))
 	logs.SetLogger(logs.AdapterFile, string(logConfigString))
-	//logs.EnableFuncCallDepth(true)
-
+	logs.EnableFuncCallDepth(true)
 	return
 }

@@ -93,7 +93,7 @@ func getTransgerConfig(conf config.Configer) (err error) {
 }
 
 // 根据传参的方式获取配置文件路径
-func getConfigPath() (err error) {
+func GetConfigPath() (err error) {
 	cmdArgs := os.Args
 	if len(cmdArgs) < 2 {
 		err = fmt.Errorf("USAGE: %v  <agent config file>, go to start the log agent.", cmdArgs[0])
