@@ -2,7 +2,9 @@ package producer
 
 import (
 	"encoding/json"
+	"github.com/Shopify/sarama"
 	"github.com/astaxie/beego/logs"
+	"logAgent/config"
 	"logAgent/model"
 )
 
@@ -18,7 +20,13 @@ func InitProducer(agentConfig *model.Config) (producer Producer, err error) {
 	case "http":
 		producer = HttpProducer{}
 	case "kafka":
-		producer = KafkaProducer{}
+		kafkaClient, err := config.InitKafka(agentConfig)
+		if err != nil {
+			logs.Error("初始化kafka失败", err)
+		}
+		producer = KafkaProducer{
+			client: kafkaClient,
+		}
 	}
 	return
 }
@@ -37,8 +45,16 @@ func (HttpProducer) SendMsg(topic string, msg model.LogContent) (err error) {
 }
 
 //Kafka消费者
-type KafkaProducer struct{}
+type KafkaProducer struct {
+	client *config.KafkaClient
+}
 
-func (KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err error) {
-	panic("implement me")
+func (producer KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err error) {
+	text, err := json.Marshal(&msg)
+	if err != nil {
+		logs.Error("序列化kafka消息失败", err)
+		return
+	}
+	producer.client.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Value: sarama.StringEncoder(text)})
+	return
 }

@@ -47,17 +47,17 @@ func main() {
 		return
 	}
 
-	// 初始化task
-	err = task.InitTailfTask(agentConfig)
-	if err != nil {
-		logs.Error("初始化tailf tasks失败", err)
-		return
-	}
-
 	//初始化producer
 	pr, err := producer.InitProducer(agentConfig)
 	if err != nil {
 		logs.Error("初始化producer失败", err)
+		return
+	}
+
+	// 初始化task
+	err = task.InitTailfTask(agentConfig)
+	if err != nil {
+		logs.Error("初始化tailf tasks失败", err)
 		return
 	}
 
