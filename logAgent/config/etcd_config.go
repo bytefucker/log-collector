@@ -9,14 +9,13 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/logs"
-	etcd "github.com/coreos/etcd/clientv3"
-	"github.com/coreos/etcd/mvcc/mvccpb"
+	"go.etcd.io/etcd/clientv3"
 	"logAgent/utils"
 )
 
 // etcd客户端对象
 type EtcdClient struct {
-	client *etcd.Client
+	client *clientv3.Client
 	// 存储日志收集的key
 	collectKeys []string
 }
@@ -27,7 +26,7 @@ var (
 
 // 初始化etcd
 func InitEtcd(agentConfig *model.Config) (err error) {
-	client, err := etcd.New(etcd.Config{
+	client, err := clientv3.New(clientv3.Config{
 		Endpoints:   agentConfig.EtcdAddress,
 		DialTimeout: 5 * time.Second,
 	})
@@ -46,17 +45,14 @@ func InitEtcd(agentConfig *model.Config) (err error) {
 	// 通过本地ip和配置文件中的前缀值获取etcd中真正的数据值
 	for _, ip := range utils.LocalIpArray {
 		etcdKey := fmt.Sprintf("%s%s", agentConfig.CollectKey, ip)
-
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		resp, err := etcdClient.client.Get(ctx, etcdKey)
 		cancel()
-
 		if err != nil {
 			logs.Warn("get key: %s from etcd failed, err: %s", etcdKey, err)
 			continue
 		}
 		etcdClient.collectKeys = append(etcdClient.collectKeys, etcdKey)
-
 		for _, v := range resp.Kvs {
 			if string(v.Key) == etcdKey {
 				err = json.Unmarshal(v.Value, &agentConfig.CollectTasks)
@@ -76,14 +72,14 @@ func InitEtcd(agentConfig *model.Config) (err error) {
 }
 
 // 初始化etcd key监控
-func initEtcdWatch() {
+/*func initEtcdWatch() {
 	for _, key := range etcdClient.collectKeys {
 		go etcdWatch(key)
 	}
-}
+}*/
 
 // 	etcd key监控处理
-func etcdWatch(key string) {
+/*func etcdWatch(key string) {
 	logs.Debug("start watch key: %s", key)
 	for true {
 		rech := etcdClient.client.Watch(context.Background(), key)
@@ -113,9 +109,10 @@ func etcdWatch(key string) {
 		}
 		logs.Info("Update task config")
 		// 更新tailf任务
-		/*err := task.UpdateTailfTask(colConfig)
+		err := task.UpdateTailfTask(colConfig)
 		if err != nil {
 			logs.Error("Update task task failed, connect: %s, err: %s", colConfig, err)
-		}*/
+		}
 	}
 }
+*/
