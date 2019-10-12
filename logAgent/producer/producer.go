@@ -25,7 +25,7 @@ func InitProducer(agentConfig *model.Config) (producer Producer, err error) {
 			logs.Error("初始化kafka失败", err)
 		}
 		producer = KafkaProducer{
-			client: kafkaClient,
+			KafkaClient: kafkaClient,
 		}
 	}
 	return
@@ -46,7 +46,7 @@ func (HttpProducer) SendMsg(topic string, msg model.LogContent) (err error) {
 
 //Kafka消费者
 type KafkaProducer struct {
-	client *config.KafkaClient
+	config.KafkaClient
 }
 
 func (producer KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err error) {
@@ -55,6 +55,11 @@ func (producer KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err 
 		logs.Error("序列化kafka消息失败", err)
 		return
 	}
-	producer.client.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Value: sarama.StringEncoder(text)})
+	_, _, err = producer.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Value: sarama.StringEncoder(text)})
+	if err != nil {
+		logs.Error("kafka消费消息失败", err)
+		return
+	}
+	logs.Debug("send to http -->appKey:[%v],msg:[%v]", appKey, string(text))
 	return
 }

@@ -11,7 +11,7 @@ type KafkaClient struct {
 }
 
 // 初始化kafka生产者
-func InitKafka(agentConfig *model.Config) (client *KafkaClient, err error) {
+func InitKafka(agentConfig *model.Config) (client KafkaClient, err error) {
 	conf := sarama.NewConfig()
 	conf.Producer.RequiredAcks = sarama.WaitForAll
 	conf.Producer.Partitioner = sarama.NewRandomPartitioner
@@ -19,10 +19,10 @@ func InitKafka(agentConfig *model.Config) (client *KafkaClient, err error) {
 
 	producer, err := sarama.NewSyncProducer(agentConfig.KafkaAddress, conf)
 	if err != nil {
-		fmt.Println("producer create failed,", err)
+		fmt.Println("SyncProducer create failed,", err)
 		return
 	}
-	client = &KafkaClient{
+	client = KafkaClient{
 		Client: producer,
 	}
 	return
