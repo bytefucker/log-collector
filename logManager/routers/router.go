@@ -1,26 +1,25 @@
 package routers
 
 import (
-	"logManager/controllers"
-
-	"github.com/astaxie/beego"
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"logManager/models"
+	"net/http"
 )
 
-func init() {
-	// 路由
-	// index
-	beego.Router("/", &controllers.IndexControll{}, "get,post:Index")
-	beego.Router("/home", &controllers.HomeControll{}, "get,post:Home")
+func InitRouter(router *mux.Router) {
+	router.HandleFunc("/server/{id}", GetOne).Methods("GET")
+}
 
-	// project
-	beego.Router("/project", &controllers.ProjectListControll{})
-	beego.Router("/project/getList", &controllers.ProjectGetListControll{}, "get,post:GetData")
-	beego.Router("/project/create", &controllers.ProjectCreateControll{}, "post:CreateProject;get:Get")
-
-	// log
-	beego.Router("/log", &controllers.LogListControll{})
-	beego.Router("/log/getList", &controllers.LogGetListControll{}, "get,post:GetData")
-	beego.Router("/log/create", &controllers.LogCreateControll{}, "post:CreateLog;get:Get")
-	beego.Router("/log/delete", &controllers.LogDeleteControll{}, "post:DeleteLog")
-
+func GetOne(writer http.ResponseWriter, request *http.Request) {
+	id := mux.Vars(request)["id"]
+	log.Print(id)
+	model, err := models.GetServerConfigById(1)
+	if err != nil {
+		log.Print(err)
+	}
+	writer.WriteHeader(http.StatusOK)
+	bytes, err := json.Marshal(model)
+	writer.Write(bytes)
 }
