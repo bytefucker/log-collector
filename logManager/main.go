@@ -1,10 +1,7 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	_ "logManager/configs"
 	"logManager/logger"
-	"logManager/middlewares"
 	"logManager/routers"
 	"net/http"
 	"time"
@@ -12,14 +9,9 @@ import (
 
 var log = logger.Instance
 
+var router = routers.Instance
+
 func main() {
-	router := mux.NewRouter()
-
-	router.Use(middlewares.LoggingMiddleware)
-	router.Use(middlewares.ContentTypeMiddleware)
-
-	routers.InitRouter(router)
-
 	srv := &http.Server{
 		Handler: router,
 		Addr:    "127.0.0.1:8080",

@@ -1,4 +1,4 @@
-package configs
+package models
 
 import "github.com/astaxie/beego/orm"
 import _ "github.com/go-sql-driver/mysql"
