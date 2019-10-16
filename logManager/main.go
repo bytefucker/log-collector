@@ -1,14 +1,16 @@
 package main
 
 import (
-	"github.com/astaxie/beego/logs"
 	"github.com/gorilla/mux"
 	_ "logManager/configs"
+	"logManager/logger"
 	"logManager/middlewares"
 	"logManager/routers"
 	"net/http"
 	"time"
 )
+
+var log = logger.Instance
 
 func main() {
 	router := mux.NewRouter()
@@ -25,5 +27,5 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	logs.Error(srv.ListenAndServe())
+	log.Error(srv.ListenAndServe())
 }

@@ -3,10 +3,12 @@ package routers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"log"
+	"logManager/logger"
 	"logManager/models"
 	"net/http"
 )
+
+var log = logger.Instance
 
 func InitRouter(router *mux.Router) {
 	router.HandleFunc("/server/{id}", GetOne).Methods("GET")
