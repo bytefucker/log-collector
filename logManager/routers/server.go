@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"logManager/models"
 	"net/http"
+	"strconv"
 )
 
 func init() {
@@ -12,9 +13,8 @@ func init() {
 }
 
 func getById(writer http.ResponseWriter, request *http.Request) {
-	id := mux.Vars(request)["id"]
-	log.Print(id)
-	model, err := models.GetServerConfigById(1)
+	id, _ := strconv.Atoi(mux.Vars(request)["id"])
+	model, err := models.GetServerConfigById(id)
 	if err != nil {
 		log.Print(err)
 	}
