@@ -9,7 +9,7 @@ export default {
   "menu": {
     "locale": true
   },
-  "title": "分布式日志收集",
+  "title": "日志管理平台",
   "pwa": false,
   "iconfontUrl": "",
   "collapse": true,
