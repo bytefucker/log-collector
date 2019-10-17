@@ -20,5 +20,5 @@ func init() {
 		FullTimestamp: true,
 	})
 
-	//Instance.SetReportCaller(true)
+	Instance.SetReportCaller(true)
 }
