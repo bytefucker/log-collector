@@ -11,7 +11,7 @@ import (
 )
 
 type ServerConfig struct {
-	Id         int       `orm:"column(id);pk" description:"主键"`
+	Id         string       `orm:"column(id);pk" description:"主键"`
 	Hostname   string    `orm:"column(hostname);size(255)" description:"hostname"`
 	Ip         string    `orm:"column(ip);size(50)" description:"ip"`
 	Remark     string    `orm:"column(remark);size(500)" description:"用途描述"`
@@ -38,7 +38,7 @@ func AddServerConfig(m *ServerConfig) (id int64, err error) {
 
 // GetServerConfigById retrieves ServerConfig by Id. Returns error if
 // Id doesn't exist
-func GetServerConfigById(id int) (v *ServerConfig, err error) {
+func GetServerConfigById(id string) (v *ServerConfig, err error) {
 	o := orm.NewOrm()
 	v = &ServerConfig{Id: id}
 	if err = o.Read(v); err == nil {
@@ -142,7 +142,7 @@ func UpdateServerConfigById(m *ServerConfig) (err error) {
 
 // DeleteServerConfig deletes ServerConfig by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteServerConfig(id int) (err error) {
+func DeleteServerConfig(id string) (err error) {
 	o := orm.NewOrm()
 	v := ServerConfig{Id: id}
 	// ascertain id exists in the database
