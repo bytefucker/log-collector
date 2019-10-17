@@ -3,13 +3,17 @@ package routers
 import (
 	"github.com/gorilla/mux"
 	"logManager/logger"
+	"net/http"
 )
 
-var log = logger.Instance
-
-var Instance = mux.NewRouter().PathPrefix("/api").Subrouter()
+var Router = mux.NewRouter()
+var (
+	log       = logger.Instance
+	apiRouter = Router.PathPrefix("/api").Subrouter()
+)
 
 func init() {
-	Instance.Use(LoggingMiddleware)
-	Instance.Use(ContentTypeMiddleware)
+	Router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("web/dist"))))
+	Router.Use(LoggingMiddleware)
+	apiRouter.Use(ContentTypeMiddleware)
 }

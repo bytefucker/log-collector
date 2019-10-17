@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	router = routers.Instance
+	router = routers.Router
 	log    = logger.Instance
 )
 

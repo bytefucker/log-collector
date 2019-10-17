@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	Instance.HandleFunc("/server/{id}", getById).Methods("GET")
+	apiRouter.HandleFunc("/server/{id}", getById).Methods("GET")
 }
 
 func getById(writer http.ResponseWriter, request *http.Request) {
