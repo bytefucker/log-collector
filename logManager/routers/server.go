@@ -11,6 +11,11 @@ import (
 func init() {
 	apiRouter.HandleFunc("/server/{id}", getById).Methods("GET")
 	apiRouter.HandleFunc("/server", addServer).Methods("POST")
+	apiRouter.HandleFunc("/server/list", queryList).Methods("POST")
+}
+
+func queryList(writer http.ResponseWriter, request *http.Request) {
+
 }
 
 func addServer(writer http.ResponseWriter, request *http.Request) {
