@@ -36,7 +36,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/DashboardAnalysis/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception404/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception500/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/user/login/locales/en-US.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/DashboardAnalysis/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception404/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception500/locales/en-US.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/user/login/locales/en-US.js')),
     },
     locale: 'en-US',
     antd: require('antd/lib/locale-provider/en_US'),
@@ -45,7 +45,7 @@ const localeInfo = {
   },
   'pt-BR': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/DashboardAnalysis/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception404/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception500/locales/pt-BR.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/DashboardAnalysis/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception404/locales/pt-BR.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception500/locales/pt-BR.js')),
     },
     locale: 'pt-BR',
     antd: require('antd/lib/locale-provider/pt_BR'),
@@ -54,7 +54,7 @@ const localeInfo = {
   },
   'zh-CN': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/DashboardAnalysis/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception404/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception500/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/user/login/locales/zh-CN.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/DashboardAnalysis/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception404/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception500/locales/zh-CN.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/user/login/locales/zh-CN.js')),
     },
     locale: 'zh-CN',
     antd: require('antd/lib/locale-provider/zh_CN'),
@@ -63,7 +63,7 @@ const localeInfo = {
   },
   'zh-TW': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/DashboardAnalysis/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception404/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Exception500/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/user/login/locales/zh-TW.js')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/DashboardAnalysis/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception404/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Exception500/locales/zh-TW.js')),...((locale) => locale.__esModule ? locale.default : locale)(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/user/login/locales/zh-TW.js')),
     },
     locale: 'zh-TW',
     antd: require('antd/lib/locale-provider/zh_TW'),

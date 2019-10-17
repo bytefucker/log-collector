@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import findRoute, {
   getUrlQuery,
-} from '/Users/yihongzhi/WebCode/logcollect-admin/node_modules/umi-build-dev/lib/findRoute.js';
+} from '/Users/yihongzhi/GoProject/logCollect/logManager/webapp/node_modules/umi-build-dev/lib/findRoute.js';
 
 // runtime plugins
 const plugins = require('umi/_runtimePlugin');
@@ -153,7 +153,7 @@ try {
   // Umi UI Bubble
   require('../../../node_modules/umi-plugin-ui/lib/bubble').default({
     port: 3000,
-    path: '/Users/yihongzhi/WebCode/logcollect-admin',
+    path: '/Users/yihongzhi/GoProject/logCollect/logManager/webapp',
     currentProject: '',
     isBigfish: undefined,
   });

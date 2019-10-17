@@ -82,6 +82,7 @@ export default {
   },
   devtool: isAntDesignProPreview ? 'source-map' : false,
   // umi routes: https://umijs.org/zh/guide/router.html
+  history: 'hash',
   routes: [
     {
       path: '/user',

@@ -20,14 +20,14 @@ export function _onCreate() {
     app.use(plugin);
   });
   
-  app.model({ namespace: 'global', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/models/global.js').default) });
-app.model({ namespace: 'login', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/models/login.js').default) });
-app.model({ namespace: 'setting', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/models/setting.js').default) });
-app.model({ namespace: 'user', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/models/user.js').default) });
-app.model({ namespace: 'model', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/DashboardAnalysis/model.jsx').default) });
-app.model({ namespace: 'model', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Realtime/model.js').default) });
-app.model({ namespace: 'model', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Setting/Server/model.js').default) });
-app.model({ namespace: 'model', ...(require('/Users/yihongzhi/WebCode/logcollect-admin/src/pages/Setting/Application/model.js').default) });
+  app.model({ namespace: 'global', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/models/global.js').default) });
+app.model({ namespace: 'login', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/models/login.js').default) });
+app.model({ namespace: 'setting', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/models/setting.js').default) });
+app.model({ namespace: 'user', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/models/user.js').default) });
+app.model({ namespace: 'model', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/DashboardAnalysis/model.jsx').default) });
+app.model({ namespace: 'model', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Realtime/model.js').default) });
+app.model({ namespace: 'model', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Setting/Server/model.js').default) });
+app.model({ namespace: 'model', ...(require('/Users/yihongzhi/GoProject/logCollect/logManager/webapp/src/pages/Setting/Application/model.js').default) });
   return app;
 }
 
