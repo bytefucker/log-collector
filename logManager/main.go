@@ -23,10 +23,10 @@ func init() {
 	flag.StringVar(&port, "port", "8080", "server port")
 	flag.BoolVar(&debug, "debug", false, "enable debug model")
 	flag.BoolVar(&help, "help", false, "help message")
+	flag.Parse()
 }
 
 func main() {
-	flag.Parse()
 	if help {
 		flag.PrintDefaults()
 	}
