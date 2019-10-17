@@ -13,7 +13,7 @@ var (
 )
 
 func init() {
-	Router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("web/dist"))))
+	Router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("webapp/dist"))))
 	Router.Use(LoggingMiddleware)
 	apiRouter.Use(ContentTypeMiddleware)
 }
