@@ -11,7 +11,7 @@ import (
 )
 
 type ServerConfig struct {
-	Id         string       `orm:"column(id);pk" description:"主键"`
+	Id         string    `orm:"column(id);pk" description:"主键"`
 	Hostname   string    `orm:"column(hostname);size(255)" description:"hostname"`
 	Ip         string    `orm:"column(ip);size(50)" description:"ip"`
 	Remark     string    `orm:"column(remark);size(500)" description:"用途描述"`

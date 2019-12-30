@@ -27,4 +27,3 @@ func ServerRun(producer producer.Producer) (err error) {
 	}
 	return
 }
-

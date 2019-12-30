@@ -8,8 +8,6 @@ import (
 	"github.com/astaxie/beego/config"
 )
 
-
-
 // 加载配置信息
 func LoadConfig(configType, configPath string) (agentConfig *model.Config, err error) {
 	conf, err := config.NewConfig(configType, configPath)

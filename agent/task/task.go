@@ -33,7 +33,6 @@ func InitTailfTask(agentConfig *model.Config) (err error) {
 	return
 }
 
-
 //创建一个收集任务
 func createTask(collectTask model.CollectTask) {
 	obj, err := tail.TailFile(collectTask.LogPath, tail.Config{
@@ -54,7 +53,6 @@ func createTask(collectTask model.CollectTask) {
 	go readFromTail(tailObj, collectTask.AppKey)
 	tailObjMgr.TailObjs = append(tailObjMgr.TailObjs, tailObj)
 }
-
 
 // 读取监听日志文件的内容
 func readFromTail(tailObj *model.TailTask, appKey string) {
