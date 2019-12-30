@@ -2,8 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"logAgent/model"
-
+	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"github.com/astaxie/beego/logs"
 )
 

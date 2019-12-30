@@ -4,13 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"logAgent/model"
+	"github.com/MarciaYi/logCollect/common/utils"
+	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"strings"
 	"time"
 
 	"github.com/astaxie/beego/logs"
 	"go.etcd.io/etcd/clientv3"
-	"logAgent/utils"
 )
 
 // etcd客户端对象

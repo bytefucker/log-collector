@@ -2,10 +2,10 @@ package producer
 
 import (
 	"encoding/json"
+	"github.com/MarciaYi/logCollect/common/config"
+	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"github.com/Shopify/sarama"
 	"github.com/astaxie/beego/logs"
-	"logAgent/config"
-	"logAgent/model"
 )
 
 //消费者接口

@@ -2,7 +2,7 @@ package config
 
 import (
 	"errors"
-	"logAgent/model"
+	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"strings"
 
 	"github.com/astaxie/beego/config"

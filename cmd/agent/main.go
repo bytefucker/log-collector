@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/MarciaYi/logCollect/common/config"
+	"github.com/MarciaYi/logCollect/internal/agent/model"
+	"github.com/MarciaYi/logCollect/internal/agent/producer"
+	"github.com/MarciaYi/logCollect/internal/agent/server"
+	"github.com/MarciaYi/logCollect/internal/agent/task"
 	"github.com/astaxie/beego/logs"
-	"logAgent/config"
-	"logAgent/model"
-	"logAgent/producer"
-	"logAgent/server"
-	"logAgent/task"
 	"os"
 )
 
