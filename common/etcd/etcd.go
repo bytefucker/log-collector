@@ -1,11 +1,11 @@
-package config
+package etcd
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/MarciaYi/logCollect/common/utils"
-	"github.com/MarciaYi/logCollect/internal/agent/model"
+	"github.com/yihongzhi/logCollect/agent/model"
+	"github.com/yihongzhi/logCollect/common/utils"
 	"strings"
 	"time"
 

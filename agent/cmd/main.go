@@ -1,12 +1,12 @@
-package cmd
+package main
 
 import (
-	"github.com/MarciaYi/logCollect/common/config"
-	"github.com/MarciaYi/logCollect/internal/agent/model"
-	"github.com/MarciaYi/logCollect/internal/agent/producer"
-	"github.com/MarciaYi/logCollect/internal/agent/server"
-	"github.com/MarciaYi/logCollect/internal/agent/task"
 	"github.com/astaxie/beego/logs"
+	"github.com/yihongzhi/logCollect/agent/model"
+	"github.com/yihongzhi/logCollect/agent/producer"
+	"github.com/yihongzhi/logCollect/agent/server"
+	"github.com/yihongzhi/logCollect/agent/task"
+	"github.com/yihongzhi/logCollect/common/config"
 	"os"
 )
 

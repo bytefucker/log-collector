@@ -1,4 +1,4 @@
-module github.com/MarciaYi/logCollect
+module github.com/yihongzhi/logCollect
 
 go 1.13
 

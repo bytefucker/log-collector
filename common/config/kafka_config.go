@@ -2,8 +2,8 @@ package config
 
 import (
 	"fmt"
-	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"github.com/Shopify/sarama"
+	"github.com/yihongzhi/logCollect/agent/model"
 )
 
 type KafkaClient struct {

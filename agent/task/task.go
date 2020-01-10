@@ -1,8 +1,8 @@
 package task
 
 import (
-	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"github.com/astaxie/beego/logs"
+	"github.com/yihongzhi/logCollect/agent/model"
 
 	"github.com/hpcloud/tail"
 )

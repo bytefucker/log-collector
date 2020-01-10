@@ -2,8 +2,8 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/MarciaYi/logCollect/internal/agent/model"
 	"github.com/astaxie/beego/logs"
+	"github.com/yihongzhi/logCollect/agent/model"
 )
 
 // 获取日志级别

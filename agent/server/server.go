@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/MarciaYi/logCollect/internal/agent/producer"
-	"github.com/MarciaYi/logCollect/internal/agent/task"
+	"github.com/yihongzhi/logCollect/agent/producer"
+	"github.com/yihongzhi/logCollect/agent/task"
 	"time"
 
 	"github.com/astaxie/beego/logs"
