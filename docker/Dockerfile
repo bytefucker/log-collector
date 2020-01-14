@@ -5,6 +5,7 @@ WORKDIR /go/src/app
 COPY . .
 RUN echo -e "http://mirrors.aliyun.com/alpine/v3.11/main\nhttp://mirrors.aliyun.com/alpine/v3.6/community" > /etc/apk/repositories
 RUN apk add --no-cache git
+RUN go env -w GOPROXY=https://goproxy.io,direct
 RUN go get -d -v ./...
 RUN go install -v ./...
 
