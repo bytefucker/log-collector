@@ -3,7 +3,7 @@ module github.com/yihongzhi/logCollect
 go 1.13
 
 require (
-	github.com/Shopify/sarama v1.24.1
+	github.com/Shopify/sarama v1.25.0
 	github.com/astaxie/beego v1.12.0
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
@@ -20,7 +20,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.12.1 // indirect
 	github.com/hpcloud/tail v1.0.0
 	github.com/jonboulle/clockwork v0.1.0 // indirect
-	github.com/klauspost/cpuid v1.2.2 // indirect
 	github.com/prometheus/client_golang v1.3.0 // indirect
 	github.com/shiena/ansicolor v0.0.0-20151119151921-a422bbe96644 // indirect
 	github.com/sirupsen/logrus v1.4.2
