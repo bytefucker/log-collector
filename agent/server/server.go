@@ -3,12 +3,14 @@ package server
 import (
 	"github.com/yihongzhi/logCollect/agent/producer"
 	"github.com/yihongzhi/logCollect/agent/task"
+	"github.com/yihongzhi/logCollect/common/logger"
 	"time"
-
-	"github.com/astaxie/beego/logs"
 )
 
-var pro producer.Producer
+var (
+	pro  producer.Producer
+	logs = logger.Instance
+)
 
 // 启动logagent服务
 func ServerRun(producer producer.Producer) (err error) {

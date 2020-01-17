@@ -1,8 +1,8 @@
 package task
 
 import (
-	"github.com/astaxie/beego/logs"
 	"github.com/yihongzhi/logCollect/agent/model"
+	"github.com/yihongzhi/logCollect/common/logger"
 
 	"github.com/hpcloud/tail"
 )
@@ -15,6 +15,7 @@ const (
 var (
 	tailObjMgr *model.TailsTaskMgr
 	hostIp     string
+	logs       = logger.Instance
 )
 
 //初始化收集任务

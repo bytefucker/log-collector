@@ -3,10 +3,12 @@ package producer
 import (
 	"encoding/json"
 	"github.com/Shopify/sarama"
-	"github.com/astaxie/beego/logs"
 	"github.com/yihongzhi/logCollect/agent/model"
-	"github.com/yihongzhi/logCollect/common/config"
+	"github.com/yihongzhi/logCollect/common/kafka"
+	"github.com/yihongzhi/logCollect/common/logger"
 )
+
+var logs = logger.Instance
 
 //消费者接口
 type Producer interface {
@@ -20,7 +22,7 @@ func InitProducer(agentConfig *model.Config) (producer Producer, err error) {
 	case "http":
 		producer = HttpProducer{}
 	case "kafka":
-		kafkaClient, err := config.InitKafka(agentConfig)
+		kafkaClient, err := kafka.InitKafkaClient(agentConfig.KafkaAddress)
 		if err != nil {
 			logs.Error("初始化kafka失败", err)
 		}
@@ -46,7 +48,7 @@ func (HttpProducer) SendMsg(topic string, msg model.LogContent) (err error) {
 
 //Kafka消费者
 type KafkaProducer struct {
-	config.KafkaClient
+	kafka.KafkaClient
 }
 
 func (producer KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err error) {

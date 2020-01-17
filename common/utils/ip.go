@@ -14,7 +14,7 @@ var (
 func init() {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		panic(fmt.Sprintf("get local ip failed, err:", err))
+		panic(fmt.Sprintf("get local ip failed, err:%v", err))
 	}
 	for _, addr := range addrs {
 		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
