@@ -64,7 +64,7 @@ func InitEtcd(agentConfig *model.Config) (err error) {
 				agentConfig.Ip = ip
 			}
 		}
-		logs.Debug("log agent collect is: %v", agentConfig.CollectTasks)
+		logs.Debug("logger agent collect is: %v", agentConfig.CollectTasks)
 	}
 	// 初始化etcd key监控
 	//initEtcdWatch()

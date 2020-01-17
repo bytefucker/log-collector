@@ -35,7 +35,7 @@ func parseAgentConfig(agentConfig *model.Config, conf config.Configer) (err erro
 	// 获取日志路径
 	logPath := conf.String("base::log_path")
 	if len(logPath) == 0 {
-		logPath = "logs/logagent.log"
+		logPath = "logs/logagent.logger"
 	}
 	agentConfig.LogPath = logPath
 
