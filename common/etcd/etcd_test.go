@@ -2,6 +2,7 @@ package etcd
 
 import (
 	"context"
+	"github.com/coreos/etcd/clientv3"
 	"testing"
 )
 
@@ -23,7 +24,8 @@ func TestInitEtcdClient(t *testing.T) {
 				t.Errorf("InitEtcdClient() error = %v", err)
 				return
 			}
-			_, err = gotEtcdClient.Client.KV.Get(context.TODO(), "/demo")
+			kv := clientv3.NewKV(gotEtcdClient.Client)
+			_, err = kv.Get(context.Background(), "/demo")
 		})
 	}
 }
