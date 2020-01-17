@@ -3,7 +3,6 @@ package etcd
 import (
 	"context"
 	"testing"
-	"time"
 )
 
 func TestInitEtcdClient(t *testing.T) {
@@ -24,10 +23,7 @@ func TestInitEtcdClient(t *testing.T) {
 				t.Errorf("InitEtcdClient() error = %v", err)
 				return
 			}
-			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-			response, err := gotEtcdClient.Client.Status(ctx, "")
-			t.Log(response)
-			cancel()
+			_, err = gotEtcdClient.Client.KV.Get(context.TODO(), "/demo")
 		})
 	}
 }
