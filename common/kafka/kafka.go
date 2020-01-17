@@ -3,6 +3,7 @@ package kafka
 import (
 	"github.com/Shopify/sarama"
 	"github.com/yihongzhi/logCollect/common/logger"
+	"time"
 )
 
 var log = logger.Instance
@@ -18,6 +19,7 @@ func InitKafkaClient(addrs []string) (client KafkaClient, err error) {
 	conf.Producer.RequiredAcks = sarama.WaitForAll
 	conf.Producer.Partitioner = sarama.NewRandomPartitioner
 	conf.Producer.Return.Successes = true
+	conf.Producer.Timeout = 5 * time.Second
 
 	producer, err := sarama.NewSyncProducer(addrs, conf)
 	if err != nil {
