@@ -44,7 +44,7 @@ func createTask(collectTask model.CollectTask) {
 		Poll:      true,
 	})
 	if err != nil {
-		logs.Warn("收集任务[%v]创建失败, %v", collectTask.LogPath, err)
+		logs.Warnf("收集任务[%v]创建失败, %v", collectTask.LogPath, err)
 	}
 	tailObj := &model.TailTask{
 		TailObj:  obj,
@@ -62,7 +62,7 @@ func readFromTail(tailObj *model.TailTask, appKey string) {
 		// 任务正常运行
 		case lineMsg, ok := <-tailObj.TailObj.Lines:
 			if !ok {
-				logs.Warn("read obj:[%v] topic:[%v] filed continue", tailObj, appKey)
+				logs.Warnf("read obj:[%v] topic:[%v] filed continue", tailObj, appKey)
 				continue
 			}
 			// 消息为空跳过
@@ -80,7 +80,7 @@ func readFromTail(tailObj *model.TailTask, appKey string) {
 			tailObjMgr.MsgChan <- msgObj
 		// 任务退出
 		case <-tailObj.ExitChan:
-			logs.Warn("收集任务退出[%v]", tailObj.Collect)
+			logs.Warnf("收集任务退出[%v]", tailObj.Collect)
 			return
 		}
 	}

@@ -22,7 +22,7 @@ func ServerRun(producer producer.Producer) (err error) {
 		// 发送一行日志数据到kafka
 		err = pro.SendMsg(msg.AppKey, msg.Msg)
 		if err != nil {
-			logs.Error("send msg:[%v] topic:[%v] failed, err:[%v]", msg.Msg, msg.AppKey, err)
+			logs.Errorf("send msg:[%v] topic:[%v] failed, err:[%v]", msg.Msg, msg.AppKey, err)
 			time.Sleep(time.Second)
 			continue
 		}

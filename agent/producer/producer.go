@@ -39,10 +39,10 @@ type HttpProducer struct{}
 func (HttpProducer) SendMsg(topic string, msg model.LogContent) (err error) {
 	json, err := json.Marshal(&msg)
 	if err != nil {
-		logs.Error("send to http marshal failed --> msg: [%v], appKey:[%s], error: %s", msg, topic, err)
+		logs.Errorf("send to http marshal failed --> msg: [%v], appKey:[%s], error: %s", msg, topic, err)
 		return
 	}
-	logs.Debug("send to http -->appKey:[%v],msg:[%v]", topic, string(json))
+	logs.Debugf("send to http -->appKey:[%v],msg:[%v]", topic, string(json))
 	return
 }
 
@@ -54,14 +54,14 @@ type KafkaProducer struct {
 func (producer KafkaProducer) SendMsg(appKey string, msg model.LogContent) (err error) {
 	text, err := json.Marshal(&msg)
 	if err != nil {
-		logs.Error("序列化kafka消息失败", err)
+		logs.Debug("序列化kafka消息失败", err)
 		return
 	}
 	_, _, err = producer.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Value: sarama.StringEncoder(text)})
 	if err != nil {
-		logs.Error("kafka消费消息失败", err)
+		logs.Debug("kafka消费消息失败", err)
 		return
 	}
-	logs.Debug("send to http -->appKey:[%v],msg:[%v]", appKey, string(text))
+	logs.Debugf("send to http -->appKey:[%v],msg:[%v]", appKey, string(text))
 	return
 }
