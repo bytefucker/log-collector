@@ -27,7 +27,7 @@ func init() {
 	flag.StringVar(&kafkaAddrs, "kafka-address", "", "Kafka服务地址")
 	flag.StringVar(&logLevel, "log-level", "info", "Log级别")
 	flag.StringVar(&collectKey, "collect-key", "/logagent", "Log级别")
-	flag.IntVar(&chanSize, "chan-size", 1021, "日志通道大小")
+	flag.IntVar(&chanSize, "chan-size", 1024, "日志通道大小")
 }
 
 func main() {
