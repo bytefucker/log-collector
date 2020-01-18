@@ -60,7 +60,7 @@ func InitTailfTask(collectKey string, chanSize int, client *etcd.EtcdClient) (er
 		etcdKey := fmt.Sprintf("%s%s", collectKey, ip)
 		resp, err := client.Client.Get(context.Background(), etcdKey)
 		if err != nil {
-			logs.Warn("get key: %s from etcd failed, err: %s", etcdKey, err)
+			logs.Warnf("get key: %s from etcd failed, err: %s", etcdKey, err)
 			continue
 		}
 		for _, v := range resp.Kvs {
