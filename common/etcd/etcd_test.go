@@ -9,34 +9,35 @@ import (
 func TestInitEtcdClient(t *testing.T) {
 
 	tests := []struct {
-		name string
-		args []string
+		name  string
+		addrs []string
+		key   string
+		value string
 	}{
 		{
-			name: "10.231.50.30",
-			args: []string{"10.231.50.30:5460"},
+			name:  "10.231.50.30",
+			addrs: []string{"10.231.50.30:5460"},
+			key:   "/demo",
+			value: "demo",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotEtcdClient, err := InitEtcdClient(tt.args)
+			gotEtcdClient, err := InitEtcdClient(tt.addrs)
 			if err != nil {
 				t.Errorf("InitEtcdClient() error = %v", err)
 				return
 			}
 			kv := clientv3.NewKV(gotEtcdClient.Client)
 
-			var demoKey = "/demo"
-			var demoValue = "demo"
-
-			_, err = kv.Put(context.TODO(), demoKey, demoValue)
+			_, err = kv.Put(context.TODO(), tt.key, tt.value)
 
 			if err != nil {
 				t.Errorf("Put error = %v", err)
 				return
 			}
 
-			getResponse, err := kv.Get(context.Background(), demoKey)
+			getResponse, err := kv.Get(context.Background(), tt.key)
 
 			if err != nil {
 				t.Errorf("Get error = %v", err)
@@ -45,11 +46,11 @@ func TestInitEtcdClient(t *testing.T) {
 
 			keyValue := getResponse.Kvs[0]
 
-			if demoKey != string(keyValue.Key) || demoValue != string(keyValue.Value) {
+			if tt.key != string(keyValue.Key) || tt.value != string(keyValue.Value) {
 				t.Errorf("Get error key=%s value=%s", keyValue.Key, keyValue.Value)
 			}
 
-			_, err = kv.Delete(context.TODO(), demoKey)
+			_, err = kv.Delete(context.TODO(), tt.key)
 
 			if err != nil {
 				t.Errorf("Delete error = %v", err)
