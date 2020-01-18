@@ -25,7 +25,30 @@ func TestInitEtcdClient(t *testing.T) {
 				return
 			}
 			kv := clientv3.NewKV(gotEtcdClient.Client)
-			_, err = kv.Get(context.Background(), "/demo")
+
+			var demoKey = "/demo"
+			var demoValue = "demo"
+
+			_, err = kv.Put(context.TODO(), demoKey, demoValue)
+
+			if err != nil {
+				t.Errorf("Put error = %v", err)
+				return
+			}
+
+			getResponse, err := kv.Get(context.Background(), demoKey)
+
+			if err != nil {
+				t.Errorf("Get error = %v", err)
+				return
+			}
+
+			keyValue := getResponse.Kvs[0]
+
+			if demoKey != string(keyValue.Key) || demoValue != string(keyValue.Value) {
+				t.Errorf("Get error key=%s value=%s", keyValue.Key, keyValue.Value)
+			}
+
 		})
 	}
 }
