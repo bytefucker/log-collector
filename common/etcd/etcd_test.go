@@ -49,6 +49,13 @@ func TestInitEtcdClient(t *testing.T) {
 				t.Errorf("Get error key=%s value=%s", keyValue.Key, keyValue.Value)
 			}
 
+			_, err = kv.Delete(context.TODO(), demoKey)
+
+			if err != nil {
+				t.Errorf("Delete error = %v", err)
+				return
+			}
+
 		})
 	}
 }
