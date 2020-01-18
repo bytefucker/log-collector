@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/yihongzhi/logCollect/common/etcd"
 	"github.com/yihongzhi/logCollect/common/kafka"
 	"github.com/yihongzhi/logCollect/common/logger"
 	"strings"
@@ -24,14 +25,17 @@ func init() {
 }
 
 func main() {
+	var err error
 	flag.Parse()
 	if help {
 		flag.PrintDefaults()
 	}
+	//初始化etcd
 	logs.Infof("begin init etcd %s", etcdAddrs)
-	//todo
+	_, err = etcd.InitEtcdClient(strings.Split(etcdAddrs, ","))
+	//初始话kafka
 	logs.Infof("begin init kafka %s", kafkaAddrs)
-	_, err := kafka.InitKafkaClient(strings.Split(kafkaAddrs, ","))
+	_, err = kafka.InitKafkaClient(strings.Split(kafkaAddrs, ","))
 	if err != nil {
 		logs.Fatalf("init kafka %s failed!", kafkaAddrs)
 	}
