@@ -6,7 +6,7 @@ COPY . .
 RUN echo -e "http://mirrors.aliyun.com/alpine/v3.11/main\nhttp://mirrors.aliyun.com/alpine/v3.11/community" > /etc/apk/repositories
 RUN apk add --no-cache git
 RUN go env -w GOPROXY=https://goproxy.io,direct
-RUN go install -v ./...
+RUN go install -mod=vendor -v ./...
 
 #final stage
 FROM alpine:3.11
