@@ -20,5 +20,19 @@ func init() {
 		FullTimestamp: true,
 	})
 
-	Instance.SetReportCaller(true)
+	//Instance.SetReportCaller(true)
+}
+
+//设置日志级别
+func SetLevel(level string) {
+	switch level {
+	case "debug":
+		Instance.SetLevel(logrus.DebugLevel)
+	case "info":
+		Instance.SetLevel(logrus.InfoLevel)
+	case "error":
+		Instance.SetLevel(logrus.ErrorLevel)
+	default:
+		Instance.SetLevel(logrus.InfoLevel)
+	}
 }
