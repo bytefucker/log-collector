@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/hpcloud/tail"
 	"github.com/yihongzhi/logCollect/common/etcd"
 	"github.com/yihongzhi/logCollect/common/logger"
@@ -179,4 +180,49 @@ func UpdateTailfTask(collectConfig []CollectTask) (err error) {
 	}
 	tailObjMgr.TailTasks = tailObjs
 	return
+}
+
+// 初始化etcd key监控
+/*func initEtcdWatch() {
+	for _, key := range etcdClient.collectKeys {
+		go etcdWatch(key)
+	}
+}*/
+
+// 	etcd key监控处理
+func etcdWatch(key string, client *etcd.EtcdClient) {
+	logs.Debug("start watch key: %s", key)
+	for true {
+		rech := client.Client.Watch(context.Background(), key)
+		var colConfig []CollectTask
+		var getConfStatus = true
+		for wresp := range rech {
+			for _, ev := range wresp.Events {
+				// key 删除
+				if ev.Type == mvccpb.DELETE {
+					logs.Warn("key [%s] is deleted", key)
+					continue
+				}
+				// key 更新
+				if ev.Type == mvccpb.PUT && string(ev.Kv.Key) == key {
+					err := json.Unmarshal(ev.Kv.Value, &colConfig)
+					if err != nil {
+						logs.Error("key [%s], Unmarshal[%s], err:%s", key, err)
+						getConfStatus = false
+						continue
+					}
+				}
+				logs.Debug("get etcd config, %s %q : %q", ev.Type, ev.Kv.Key, ev.Kv.Value)
+			}
+			if getConfStatus {
+				break
+			}
+		}
+		logs.Info("Update task config")
+		// 更新tailf任务
+		err := UpdateTailfTask(colConfig)
+		if err != nil {
+			logs.Error("Update task task failed, connect: %s, err: %s", colConfig, err)
+		}
+	}
 }
