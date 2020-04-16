@@ -25,6 +25,7 @@ require (
 	github.com/sirupsen/logrus v1.4.2
 	github.com/stretchr/testify v1.4.0 // indirect
 	github.com/ugorji/go v1.1.7 // indirect
+	github.com/urfave/cli v1.22.4
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
 	go.etcd.io/bbolt v1.3.3 // indirect
 	golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529 // indirect
