@@ -1,19 +1,11 @@
-# Go parameters
-GOCMD=go
-GOBUILD=$(GOCMD) build
-GOCLEAN=$(GOCMD) clean
-GOTEST=$(GOCMD) test
-GOGET=$(GOCMD) get
 
-
-all: clean test build
+all: clean  build
 
 clean:
-	$(GOCLEAN)
-
-test:
-	$(GOTEST) -v ./...
+	go clean -i .
 
 build:
-	$(GOBUILD)  -v ./...
+	go build -mod=vendor -v -o ${GOPATH}/bin/logcollect/agent ./agent/cmd/agent
+	go build -mod=vendor -v -o ${GOPATH}/bin/logcollect/analysis ./analysis/cmd/analysis
+	go build -mod=vendor -v -o ${GOPATH}/bin/logcollect/manager ./manager/cmd/manager
 
