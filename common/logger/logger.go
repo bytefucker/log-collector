@@ -12,9 +12,6 @@ func init() {
 	// Can be any io.Writer, see below for File example
 	Instance.SetOutput(os.Stdout)
 
-	// Only log the warning severity or above.
-	Instance.SetLevel(logrus.DebugLevel)
-
 	Instance.SetFormatter(&logrus.TextFormatter{
 		DisableColors: false,
 		FullTimestamp: true,
@@ -24,15 +21,10 @@ func init() {
 }
 
 //设置日志级别
-func SetLevel(level string) {
-	switch level {
-	case "debug":
+func EnableDebugLevel(b bool) {
+	if b {
 		Instance.SetLevel(logrus.DebugLevel)
-	case "info":
-		Instance.SetLevel(logrus.InfoLevel)
-	case "error":
-		Instance.SetLevel(logrus.ErrorLevel)
-	default:
+	} else {
 		Instance.SetLevel(logrus.InfoLevel)
 	}
 }
