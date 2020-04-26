@@ -31,7 +31,7 @@ func StartAgent(cli *cli.Context) error {
 	initArgs(cli)
 	var err error
 	//1.初始化etcd
-	etcdClient, err := etcd.InitEtcdClient(etcdAddrs)
+	etcdClient, err := etcd.NewClient(etcdAddrs)
 	if err != nil {
 		log.Fatalf("init etcdclient %s failed...", etcdAddrs)
 	}

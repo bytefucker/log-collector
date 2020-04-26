@@ -7,11 +7,11 @@ import (
 
 // etcd客户端对象
 type EtcdClient struct {
-	Client *clientv3.Client
+	*clientv3.Client
 }
 
 // 初始化etcd
-func InitEtcdClient(addrs []string) (etcdClient *EtcdClient, err error) {
+func NewClient(addrs []string) (etcdClient *EtcdClient, err error) {
 	client, err := clientv3.New(clientv3.Config{
 		Endpoints:   addrs,
 		DialTimeout: 5 * time.Second,
@@ -20,7 +20,7 @@ func InitEtcdClient(addrs []string) (etcdClient *EtcdClient, err error) {
 		return
 	}
 	etcdClient = &EtcdClient{
-		Client: client,
+		client,
 	}
 	return
 }
