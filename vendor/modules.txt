@@ -1,7 +1,5 @@
 # github.com/Shopify/sarama v1.25.0
 github.com/Shopify/sarama
-# github.com/astaxie/beego v1.12.0
-github.com/astaxie/beego/orm
 # github.com/coreos/etcd v3.2.28+incompatible
 github.com/coreos/etcd/auth/authpb
 github.com/coreos/etcd/clientv3
@@ -45,8 +43,6 @@ github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
 # github.com/golang/snappy v0.0.1
 github.com/golang/snappy
-# github.com/gorilla/mux v1.7.3
-github.com/gorilla/mux
 # github.com/hashicorp/go-uuid v1.0.1
 github.com/hashicorp/go-uuid
 # github.com/hpcloud/tail v1.0.0
@@ -58,6 +54,11 @@ github.com/hpcloud/tail/winfile
 # github.com/jcmturner/gofork v0.0.0-20190328161633-dc7c13fece03
 github.com/jcmturner/gofork/encoding/asn1
 github.com/jcmturner/gofork/x/crypto/pbkdf2
+# github.com/jinzhu/gorm v1.9.12
+github.com/jinzhu/gorm
+github.com/jinzhu/gorm/dialects/mysql
+# github.com/jinzhu/inflection v1.0.0
+github.com/jinzhu/inflection
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
 # github.com/klauspost/compress v1.9.7
@@ -91,7 +92,7 @@ github.com/sirupsen/logrus
 github.com/ugorji/go/codec
 # github.com/urfave/cli v1.22.4
 github.com/urfave/cli
-# golang.org/x/crypto v0.0.0-20190510104115-cbcb75029529
+# golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
 golang.org/x/crypto/md4
 golang.org/x/crypto/pbkdf2
 # golang.org/x/net v0.0.0-20191002035440-2ec189313ef0
