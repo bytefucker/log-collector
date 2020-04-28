@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/yihongzhi/logCollect/common/logger"
 	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"github.com/yihongzhi/logCollect/agent"
 )
+
+var log = logger.Instance
 
 func main() {
 	app := cli.NewApp()
@@ -41,7 +44,7 @@ func main() {
 			},
 			Action: func(c *cli.Context) {
 				err := agent.StartAgent(c)
-				logrus.Error("StartAgent Failed...", err)
+				log.Error("StartAgent Failed...", err)
 			},
 		},
 		{

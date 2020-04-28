@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 	"github.com/yihongzhi/logCollect/agent/producer"
 	"github.com/yihongzhi/logCollect/agent/server"
@@ -22,7 +23,10 @@ func initArgs(cli *cli.Context) {
 	kafkaAddrs = cli.StringSlice("kafka-addr")
 	collectKey = cli.String("collect-key")
 	chanSize = cli.Int("chan-size")
-	logger.EnableDebugLevel(cli.Bool("debug"))
+	b := cli.Bool("debug")
+	if b {
+		log.SetMode(logrus.DebugLevel)
+	}
 	log.Infof("initArgs etcd-addr=%s,kafka-addr=%s,collect-key=%s,chan-size=%d", etcdAddrs, kafkaAddrs, collectKey, chanSize)
 }
 
