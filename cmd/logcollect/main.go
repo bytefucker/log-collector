@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/yihongzhi/logCollect/common/logger"
+	"github.com/yihongzhi/logCollect/manager"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -57,8 +58,14 @@ func main() {
 		{
 			Name:        "manager",
 			Description: "日志查询管理模块",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "port",
+					Value: "8080",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("manager")
+				manager.NewManageServer(c)
 			},
 		},
 	}

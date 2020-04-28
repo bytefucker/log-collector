@@ -1,0 +1,6 @@
+
+### demo
+GET {{host}}/api/demo
+Accept: application/x-www-form-urlencoded
+
+###

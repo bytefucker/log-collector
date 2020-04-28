@@ -12,6 +12,7 @@ require (
 	github.com/coreos/pkg v0.0.0-20180928190104-399ea9e2e55f // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
+	github.com/gin-gonic/gin v1.6.2
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20191227052852-215e87163ea7 // indirect
@@ -23,8 +24,6 @@ require (
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/prometheus/client_golang v1.3.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
-	github.com/stretchr/testify v1.4.0 // indirect
-	github.com/ugorji/go v1.1.7 // indirect
 	github.com/urfave/cli v1.22.4
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
 	go.etcd.io/bbolt v1.3.3 // indirect
