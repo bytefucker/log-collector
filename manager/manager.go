@@ -5,7 +5,7 @@ import (
 	"github.com/urfave/cli"
 	"github.com/yihongzhi/logCollect/common/etcd"
 	"github.com/yihongzhi/logCollect/common/logger"
-	"github.com/yihongzhi/logCollect/manager/db"
+	"github.com/yihongzhi/logCollect/manager/database"
 	"github.com/yihongzhi/logCollect/manager/routers"
 )
 
@@ -16,24 +16,21 @@ var (
 	debug     bool
 )
 
-func NewManageServer(c *cli.Context) error {
+func StartManageServer(c *cli.Context) error {
 	var err error
-	debug = c.Bool("debug")
-	if debug {
-		gin.SetMode(gin.DebugMode)
-	}
 	//初始化数据库
-	err = db.Open()
+	err = database.Open("root:y@4216160@/manager?charset=utf8&parseTime=True&loc=Local")
 	//初始化etcdc
 	etcdAddrs = c.StringSlice("etcd-addr")
 	etcd.NewClient(etcdAddrs)
 	//初始化Web服务
 	port = c.Int("port")
+	gin.SetMode(gin.ReleaseMode)
 	app := gin.Default()
 	api := app.Group("/api")
 	{
-		api.GET("/demo", routers.Demo)
+		api.GET("/application/list", routers.ApplicationList)
 	}
-	err = app.Run(":" + string(port))
+	err = app.Run(":8080")
 	return err
 }

@@ -63,9 +63,14 @@ func main() {
 					Name:  "port",
 					Value: "8080",
 				},
+				cli.StringSliceFlag{
+					Name:     "etcd-addr",
+					Required: true,
+				},
 			},
 			Action: func(c *cli.Context) {
-				manager.NewManageServer(c)
+				err := manager.StartManageServer(c)
+				log.Error("StartManageServer Failed...", err)
 			},
 		},
 	}
