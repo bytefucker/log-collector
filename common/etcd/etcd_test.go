@@ -16,9 +16,9 @@ func TestInitEtcdClient(t *testing.T) {
 	}{
 		{
 			name:  "10.231.50.26",
-			addrs: []string{"10.231.50.26:22379"},
-			key:   "/demo",
-			value: "demo",
+			addrs: []string{"10.231.50.30:22379"},
+			key:   "/log/10.231.23.85",
+			value: "{ \"appKey\":\"demo\",\"logPath\":\"/Users/yihongzhi/log/current.log\" }",
 		},
 	}
 	for _, tt := range tests {
@@ -48,7 +48,7 @@ func TestInitEtcdClient(t *testing.T) {
 				t.Logf("Get key=%s value=%s", keyValue.Key, keyValue.Value)
 			}
 
-			deleteResponse, err := kv.Delete(context.TODO(), tt.key)
+			/*deleteResponse, err := kv.Delete(context.TODO(), tt.key)
 			if err != nil {
 				t.Errorf("Get error = %v", err)
 				return
@@ -57,7 +57,7 @@ func TestInitEtcdClient(t *testing.T) {
 				t.Errorf("delete error key=%s value=%s", tt.key, tt.value)
 			} else {
 				t.Logf("delete key=%s success count %d", tt.key, deleteResponse.Deleted)
-			}
+			}*/
 
 		})
 	}

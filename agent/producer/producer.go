@@ -31,7 +31,7 @@ func (producer KafkaProducer) SendMsg(appKey string, msg LogContent) (err error)
 		logs.Debug("serilazid msg failed ", err)
 		return
 	}
-	_, _, err = producer.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Value: sarama.StringEncoder(text)})
+	_, _, err = producer.Client.SendMessage(&sarama.ProducerMessage{Topic: appKey, Key: sarama.StringEncoder(appKey), Value: sarama.StringEncoder(text)})
 	if err != nil {
 		logs.Error("kafka producer msg failed", err)
 		return
