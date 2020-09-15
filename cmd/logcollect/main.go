@@ -16,7 +16,7 @@ var log = logger.Instance
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "logcollect"
+	app.Name = "log-collector"
 	app.Description = "分布式日志收集组件"
 	app.Version = "1.0.0"
 	app.Flags = []cli.Flag{
@@ -34,10 +34,6 @@ func main() {
 				},
 				cli.StringSliceFlag{
 					Name: "kafka-addr",
-				},
-				cli.StringFlag{
-					Name:  "collect-key",
-					Value: "/logagent",
 				},
 				cli.IntFlag{
 					Name:  "chan-size",
