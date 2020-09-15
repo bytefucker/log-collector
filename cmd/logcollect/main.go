@@ -70,8 +70,12 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) {
-				err := manager.StartManageServer(c)
-				log.Error("StartManageServer Failed...", err)
+				serverConfig := config.InitManagerServerConfig(c)
+				server, err := manager.NewManageServer(serverConfig)
+				if err != nil {
+					log.Error("Init ManageServer Failed...", err)
+				}
+				server.StartManageServer()
 			},
 		},
 	}

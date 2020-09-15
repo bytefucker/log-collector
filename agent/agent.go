@@ -22,20 +22,20 @@ type logAgent struct {
 }
 
 //开启一个收集代理
-func NewAgent(config *config.AgentConfig) (*logAgent, error) {
+func NewAgent(c *config.AgentConfig) (*logAgent, error) {
 	var err error
 	//1.初始化etcd
-	etcdClient, err := etcd.NewClient(config.EtcdAdrr)
+	etcdClient, err := etcd.NewClient(c.EtcdAdrr)
 	if err != nil {
-		log.Fatalf("init etcd client %s failed...", config.EtcdAdrr)
+		log.Fatalf("init etcd client %s failed...", c.EtcdAdrr)
 	}
 	//2.初始化producer
-	kafkaClient, err := kafka.NewKafkaClient(config.KafKaAddr)
+	kafkaClient, err := kafka.NewKafkaClient(c.KafKaAddr)
 	if err != nil {
-		log.Fatalf("init kafka producer %s failed...", config.KafKaAddr)
+		log.Fatalf("init kafka producer %s failed...", c.KafKaAddr)
 	}
 	//3.初始化任务
-	taskMgr, err := task.NewTailTaskManger(config.CollectorKey, config.ChanSize, etcdClient)
+	taskMgr, err := task.NewTailTaskManger(c.CollectorKey, c.ChanSize, etcdClient)
 	if err != nil {
 		log.Fatal("init task failed ...", err)
 	}
