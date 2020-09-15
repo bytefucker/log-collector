@@ -14,7 +14,7 @@ import (
 )
 
 //日志任务管理
-type TaskManger struct {
+type TailTaskManger struct {
 	TailTasks []*TailTask      //任务列表
 	MsgChan   chan *LogTextMsg //消息通道
 	Lock      sync.Mutex
@@ -46,13 +46,13 @@ const (
 )
 
 var (
-	tailObjMgr *TaskManger
+	tailObjMgr *TailTaskManger
 	hostIp     string
 	logs       = logger.Instance
 )
 
 //初始化收集任务
-func NewTaskManger(collectKey string, chanSize int, client *etcd.EtcdClient) (*TaskManger, error) {
+func NewTailTaskManger(collectKey string, chanSize int, client *etcd.EtcdClient) (*TailTaskManger, error) {
 	var tasks []CollectTask
 	if strings.HasSuffix(collectKey, "/") == false {
 		collectKey = fmt.Sprintf("%s/", collectKey)
@@ -77,7 +77,7 @@ func NewTaskManger(collectKey string, chanSize int, client *etcd.EtcdClient) (*T
 			}
 		}
 	}
-	tailObjMgr = &TaskManger{
+	tailObjMgr = &TailTaskManger{
 		MsgChan: make(chan *LogTextMsg, chanSize),
 	}
 	if len(tasks) == 0 {

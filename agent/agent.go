@@ -16,9 +16,9 @@ var (
 
 //日志收集代理
 type logAgent struct {
-	etcdClient  *etcd.EtcdClient
-	taskMgr     *task.TaskManger
-	kafkaClient *kafka.KafkaClient
+	etcdClient     *etcd.EtcdClient
+	tailTaskManger *task.TailTaskManger
+	kafkaClient    *kafka.KafkaClient
 }
 
 //开启一个收集代理
@@ -27,7 +27,7 @@ func NewAgent(config *config.AgentConfig) (*logAgent, error) {
 	//1.初始化etcd
 	etcdClient, err := etcd.NewClient(config.EtcdAdrr)
 	if err != nil {
-		log.Fatalf("init etcdclient %s failed...", config.EtcdAdrr)
+		log.Fatalf("init etcd client %s failed...", config.EtcdAdrr)
 	}
 	//2.初始化producer
 	kafkaClient, err := kafka.NewKafkaClient(config.KafKaAddr)
@@ -35,14 +35,14 @@ func NewAgent(config *config.AgentConfig) (*logAgent, error) {
 		log.Fatalf("init kafka producer %s failed...", config.KafKaAddr)
 	}
 	//3.初始化任务
-	taskMgr, err := task.NewTaskManger(config.CollectorKey, config.ChanSize, etcdClient)
+	taskMgr, err := task.NewTailTaskManger(config.CollectorKey, config.ChanSize, etcdClient)
 	if err != nil {
 		log.Fatal("init task failed ...", err)
 	}
 	agent := &logAgent{
-		etcdClient:  etcdClient,
-		kafkaClient: kafkaClient,
-		taskMgr:     taskMgr,
+		etcdClient:     etcdClient,
+		kafkaClient:    kafkaClient,
+		tailTaskManger: taskMgr,
 	}
 	return agent, err
 }
