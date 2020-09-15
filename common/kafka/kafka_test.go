@@ -18,9 +18,9 @@ func TestInitKafkaClient(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotClient, err := InitKafkaClient(tt.args)
+			gotClient, err := NewKafkaClient(tt.args)
 			if err != nil {
-				t.Errorf("InitKafkaClient() error = %v", err)
+				t.Errorf("NewKafkaClient() error = %v", err)
 				return
 			}
 			message := sarama.ProducerMessage{

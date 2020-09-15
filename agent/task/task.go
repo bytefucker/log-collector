@@ -14,7 +14,7 @@ import (
 )
 
 //日志任务管理
-type TailsTaskMgr struct {
+type TaskManger struct {
 	TailTasks []*TailTask      //任务列表
 	MsgChan   chan *LogTextMsg //消息通道
 	Lock      sync.Mutex
@@ -46,13 +46,13 @@ const (
 )
 
 var (
-	tailObjMgr *TailsTaskMgr
+	tailObjMgr *TaskManger
 	hostIp     string
 	logs       = logger.Instance
 )
 
 //初始化收集任务
-func InitTailfTask(collectKey string, chanSize int, client *etcd.EtcdClient) (err error) {
+func NewTaskManger(collectKey string, chanSize int, client *etcd.EtcdClient) (*TaskManger, error) {
 	var tasks []CollectTask
 	if strings.HasSuffix(collectKey, "/") == false {
 		collectKey = fmt.Sprintf("%s/", collectKey)
@@ -77,7 +77,7 @@ func InitTailfTask(collectKey string, chanSize int, client *etcd.EtcdClient) (er
 			}
 		}
 	}
-	tailObjMgr = &TailsTaskMgr{
+	tailObjMgr = &TaskManger{
 		MsgChan: make(chan *LogTextMsg, chanSize),
 	}
 	if len(tasks) == 0 {
@@ -86,7 +86,7 @@ func InitTailfTask(collectKey string, chanSize int, client *etcd.EtcdClient) (er
 	for _, task := range tasks {
 		createTask(task)
 	}
-	return
+	return tailObjMgr, nil
 }
 
 // 从chan中获取一行数据

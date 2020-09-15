@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/yihongzhi/logCollect/common/logger"
+	"github.com/yihongzhi/logCollect/config"
 	"github.com/yihongzhi/logCollect/manager"
 	"os"
 
@@ -44,8 +45,12 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) {
-				err := agent.StartAgent(c)
-				log.Error("StartAgent Failed...", err)
+				agentConfig := config.InitAgentConfig(c)
+				logAgent, err := agent.NewAgent(agentConfig)
+				if err != nil {
+					log.Error("Init Agent Failed...", err)
+				}
+				logAgent.StartAgent()
 			},
 		},
 		{

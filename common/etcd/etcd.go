@@ -11,18 +11,13 @@ type EtcdClient struct {
 }
 
 // 初始化etcd
-func NewClient(addrs []string) (etcdClient *EtcdClient, err error) {
+func NewClient(addrs []string) (*EtcdClient, error) {
 	client, err := clientv3.New(clientv3.Config{
 		Endpoints:   addrs,
 		DialTimeout: 5 * time.Second,
 	})
-	if err != nil {
-		return
-	}
-	etcdClient = &EtcdClient{
-		client,
-	}
-	return
+	etcdClient := &EtcdClient{client}
+	return etcdClient, err
 }
 
 // 初始化etcd key监控

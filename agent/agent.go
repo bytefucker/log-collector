@@ -1,58 +1,63 @@
 package agent
 
 import (
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
-	"github.com/yihongzhi/logCollect/agent/producer"
-	"github.com/yihongzhi/logCollect/agent/server"
 	"github.com/yihongzhi/logCollect/agent/task"
 	"github.com/yihongzhi/logCollect/common/etcd"
+	"github.com/yihongzhi/logCollect/common/kafka"
 	"github.com/yihongzhi/logCollect/common/logger"
+	"github.com/yihongzhi/logCollect/common/utils"
+	"github.com/yihongzhi/logCollect/config"
+	"time"
 )
 
 var (
-	log        = logger.Instance
-	etcdAddrs  []string
-	kafkaAddrs []string
-	collectKey string
-	chanSize   int
+	log = logger.Instance
 )
 
-func initArgs(cli *cli.Context) {
-	etcdAddrs = cli.StringSlice("etcd-addr")
-	kafkaAddrs = cli.StringSlice("kafka-addr")
-	collectKey = cli.String("collect-key")
-	chanSize = cli.Int("chan-size")
-	b := cli.Bool("debug")
-	if b {
-		log.SetMode(logrus.DebugLevel)
-	}
-	log.Infof("initArgs etcd-addr=%s,kafka-addr=%s,collect-key=%s,chan-size=%d", etcdAddrs, kafkaAddrs, collectKey, chanSize)
+//日志收集代理
+type logAgent struct {
+	etcdClient  *etcd.EtcdClient
+	taskMgr     *task.TaskManger
+	kafkaClient *kafka.KafkaClient
 }
 
 //开启一个收集代理
-func StartAgent(cli *cli.Context) error {
-	initArgs(cli)
+func NewAgent(config *config.AgentConfig) (*logAgent, error) {
 	var err error
 	//1.初始化etcd
-	etcdClient, err := etcd.NewClient(etcdAddrs)
+	etcdClient, err := etcd.NewClient(config.EtcdAdrr)
 	if err != nil {
-		log.Fatalf("init etcdclient %s failed...", etcdAddrs)
+		log.Fatalf("init etcdclient %s failed...", config.EtcdAdrr)
 	}
 	//2.初始化producer
-	kafkaProducer, err := producer.InitKafkaProducer(kafkaAddrs)
+	kafkaClient, err := kafka.NewKafkaClient(config.KafKaAddr)
 	if err != nil {
-		log.Fatalf("init kafka producer %s failed...", kafkaAddrs)
+		log.Fatalf("init kafka producer %s failed...", config.KafKaAddr)
 	}
 	//3.初始化任务
-	err = task.InitTailfTask(collectKey, chanSize, etcdClient)
+	taskMgr, err := task.NewTaskManger(config.CollectorKey, config.ChanSize, etcdClient)
 	if err != nil {
 		log.Fatal("init task failed ...", err)
 	}
-	//4.初始化收集服务
-	err = server.ServerRun(kafkaProducer)
-	if err != nil {
-		log.Fatal("log agent server start failed ...", err)
+	agent := &logAgent{
+		etcdClient:  etcdClient,
+		kafkaClient: kafkaClient,
+		taskMgr:     taskMgr,
 	}
-	return err
+	return agent, err
+}
+
+func (agent *logAgent) StartAgent() {
+	localIp := utils.LocalIpArray[0]
+	log.Infof("agent start is running bind ip %s....", localIp)
+	for true {
+		msg := task.GetOneLine()
+		err := agent.kafkaClient.SendMsg(msg.AppKey, kafka.LogContent{Ip: localIp, Msg: msg.Msg})
+		if err != nil {
+			log.Errorf("send msg:[%v] topic:[%v] failed, err:[%v]", msg.Msg, msg.AppKey, err)
+			time.Sleep(time.Second)
+			continue
+		}
+	}
+	return
 }
