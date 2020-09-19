@@ -3,8 +3,8 @@ all: clean  build
 
 clean:
 	go clean -i ./...
-	rm ${GOPATH}/bin/logcollect
+	rm -rf ${GOPATH}/bin/log-collector
 
 build:
-	go build -mod=vendor -v -o ${GOPATH}/bin/logcollect ./cmd/logcollect
+	go build -mod=vendor -v -o ${GOPATH}/bin/log-collector .
 
