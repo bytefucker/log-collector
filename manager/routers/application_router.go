@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/yihongzhi/logCollect/manager/database"
-	"github.com/yihongzhi/logCollect/manager/models"
+	"github.com/yihongzhi/log-collector/manager/database"
+	"github.com/yihongzhi/log-collector/manager/models"
 	"net/http"
 )
 

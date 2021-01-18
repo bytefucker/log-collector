@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/yihongzhi/logCollect/common/logger"
-	"github.com/yihongzhi/logCollect/config"
-	"github.com/yihongzhi/logCollect/manager"
+	"github.com/yihongzhi/log-collector/common/logger"
+	"github.com/yihongzhi/log-collector/config"
+	"github.com/yihongzhi/log-collector/manager"
 	"os"
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"github.com/yihongzhi/logCollect/agent"
+	"github.com/yihongzhi/log-collector/agent"
 )
 
 var log = logger.Instance
@@ -63,10 +63,17 @@ func main() {
 				cli.StringFlag{
 					Name:  "port",
 					Value: "8080",
+					Usage: "API监听地址",
 				},
 				cli.StringSliceFlag{
 					Name:     "etcd-addr",
 					Required: true,
+					Usage:    "Etcd服务地址",
+				},
+				cli.StringSliceFlag{
+					Name:     "db-connect-string",
+					Required: true,
+					Usage:    "数据库连接字符串",
 				},
 			},
 			Action: func(c *cli.Context) {

@@ -18,6 +18,7 @@ type AgentConfig struct {
 type ManagerServerConfig struct {
 	Port         int
 	EtcdAdrr     []string
+	DBConnectStr string
 	CollectorKey string
 }
 
@@ -33,7 +34,9 @@ func InitAgentConfig(c *cli.Context) *AgentConfig {
 
 func InitManagerServerConfig(c *cli.Context) *ManagerServerConfig {
 	return &ManagerServerConfig{
-		Port:     c.Int("port"),
-		EtcdAdrr: c.StringSlice("etcd-addr"),
+		Port:         c.Int("port"),
+		EtcdAdrr:     c.StringSlice("etcd-addr"),
+		DBConnectStr: c.String("db-connect-string"),
+		CollectorKey: CollectorKey,
 	}
 }

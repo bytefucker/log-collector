@@ -4,7 +4,8 @@ import (
 	"time"
 )
 
-type ServerConfig struct {
+//服务器信息
+type ServerInfo struct {
 	Id         string    `orm:"column(id);pk" description:"主键"`
 	Hostname   string    `orm:"column(hostname);size(255)" description:"hostname"`
 	Ip         string    `orm:"column(ip);size(50)" description:"ip"`

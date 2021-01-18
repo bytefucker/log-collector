@@ -3,7 +3,7 @@ package kafka
 import (
 	"encoding/json"
 	"github.com/Shopify/sarama"
-	"github.com/yihongzhi/logCollect/common/logger"
+	"github.com/yihongzhi/log-collector/common/logger"
 	"time"
 )
 

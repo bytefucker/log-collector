@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/hpcloud/tail"
-	"github.com/yihongzhi/logCollect/common/etcd"
-	"github.com/yihongzhi/logCollect/common/logger"
-	"github.com/yihongzhi/logCollect/common/utils"
+	"github.com/yihongzhi/log-collector/common/etcd"
+	"github.com/yihongzhi/log-collector/common/logger"
+	"github.com/yihongzhi/log-collector/common/utils"
 	"strings"
 	"sync"
 )

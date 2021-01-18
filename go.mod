@@ -1,4 +1,4 @@
-module github.com/yihongzhi/logCollect
+module github.com/yihongzhi/log-collector
 
 go 1.12
 

@@ -3,7 +3,7 @@ package database
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/yihongzhi/logCollect/manager/models"
+	"github.com/yihongzhi/log-collector/manager/models"
 	"log"
 )
 
@@ -15,7 +15,8 @@ func Open(connectStr string) error {
 	if err != nil {
 		log.Panicln("open mysql error: ", err)
 	}
-	DB.AutoMigrate(&models.Application{})
 	DB.LogMode(true)
+	DB.SingularTable(true)
+	DB.AutoMigrate(&models.Application{}, &models.ServerInfo{})
 	return err
 }

@@ -1,12 +1,12 @@
 package agent
 
 import (
-	"github.com/yihongzhi/logCollect/agent/task"
-	"github.com/yihongzhi/logCollect/common/etcd"
-	"github.com/yihongzhi/logCollect/common/kafka"
-	"github.com/yihongzhi/logCollect/common/logger"
-	"github.com/yihongzhi/logCollect/common/utils"
-	"github.com/yihongzhi/logCollect/config"
+	"github.com/yihongzhi/log-collector/agent/task"
+	"github.com/yihongzhi/log-collector/common/etcd"
+	"github.com/yihongzhi/log-collector/common/kafka"
+	"github.com/yihongzhi/log-collector/common/logger"
+	"github.com/yihongzhi/log-collector/common/utils"
+	"github.com/yihongzhi/log-collector/config"
 	"time"
 )
 
