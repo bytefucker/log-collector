@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"github.com/urfave/cli"
 	"github.com/yihongzhi/log-collector/common/logger"
 )
 
@@ -36,31 +35,10 @@ type ManagerConfig struct {
 	CollectorKey string   `mapstructure:"collector-key"`
 }
 
-//初始化配置
-func InitAgentConfig(c *cli.Context) *AgentConfig {
-	return &AgentConfig{
-		EtcdAddr:     c.StringSlice("etcd-addr"),
-		KafKaAddr:    c.StringSlice("kafka-addr"),
-		ChanSize:     c.Int("chan-size"),
-		CollectorKey: CollectorKey,
-	}
-}
-
-func InitManagerServerConfig(c *cli.Context) *ManagerConfig {
-	return &ManagerConfig{
-		Port:         c.Int("port"),
-		EtcdAdrr:     c.StringSlice("etcd-addr"),
-		DBConnectStr: c.String("db-connect-string"),
-		CollectorKey: CollectorKey,
-	}
-}
-
 //读取yaml配置
-func NewAppConfig() *AppConfig {
+func NewAppConfig(path string) *AppConfig {
 	config := viper.New()
-	config.AddConfigPath("../conf") //设置读取的文件路径
-	config.SetConfigName("config")  //设置读取的文件名
-	config.SetConfigType("yaml")    //设置文件的类型
+	config.SetConfigFile(path)
 	//尝试进行配置读取
 	if err := config.ReadInConfig(); err != nil {
 		log.Fatalln("读取配置失败", err)

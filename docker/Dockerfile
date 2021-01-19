@@ -12,6 +12,8 @@ RUN go install -mod=vendor -v ./...
 FROM alpine:3.11
 RUN echo -e "http://mirrors.aliyun.com/alpine/v3.11/main\nhttp://mirrors.aliyun.com/alpine/v3.11/community" > /etc/apk/repositories
 RUN apk --no-cache add ca-certificates
-COPY --from=builder /go/bin/* /opt/log-collector/
+WORKDIR /opt/log-collector
+COPY --from=builder /go/bin/* .
+COPY --from=builder /go/src/log-collector/conf/* ./conf/
 
 
