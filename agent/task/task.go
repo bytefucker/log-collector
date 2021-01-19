@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/mvcc/mvccpb"
 	"github.com/hpcloud/tail"
 	"github.com/yihongzhi/log-collector/common/etcd"
@@ -81,13 +82,13 @@ func readTask(collectKey string, client *etcd.EtcdClient) ([]TailTaskDetails, er
 	}
 	for _, ip := range utils.LocalIpArray {
 		etcdKey := fmt.Sprintf("%s%s", collectKey, ip)
-		resp, err := client.Client.Get(context.Background(), etcdKey)
+		resp, err := client.Client.Get(context.Background(), etcdKey, clientv3.WithPrefix())
 		if err != nil {
 			logs.Warnf("get key: %s from etcd failed, err: %s", etcdKey, err)
 			return nil, err
 		}
 		for _, v := range resp.Kvs {
-			if string(v.Key) == etcdKey {
+			if strings.HasPrefix(string(v.Key), etcdKey) {
 				var task TailTaskDetails
 				err = json.Unmarshal(v.Value, &task)
 				if err != nil {
