@@ -2,6 +2,8 @@ package mock
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/yihongzhi/log-collector/agent/task"
 
 	"fmt"
 	"github.com/coreos/etcd/clientv3"
@@ -11,16 +13,17 @@ import (
 
 func mockTask() {
 	var err error
-	var key = "/log-collector/10.231.20.75"
+	var key = "/log-collector/10.231.50.28/"
 	etcdClient, err := etcd.NewClient([]string{"10.231.50.28:5460"})
 
 	deleteResponse, err := etcdClient.Delete(context.TODO(), key)
 	fmt.Println(deleteResponse, err)
 
 	ops := []clientv3.Op{
-		clientv3.OpPut(key+"/1", "1"),
-		clientv3.OpPut(key+"/2", "2"),
-		clientv3.OpPut(key+"/3", "3")}
+		clientv3.OpPut(key+"vsr-camera", taskData("vsr-camera", "/var/log/vsr/vsr-camera/application.log")),
+		clientv3.OpPut(key+"vsr-offline-task", taskData("vsr-offline-task", "/var/log/vsr/vsr-offline-task/application.log")),
+		clientv3.OpPut(key+"vsr-plantask", taskData("vsr-plantask", "/var/log/vsr/vsr-plantask/application.log")),
+	}
 	for _, op := range ops {
 		if _, err := etcdClient.Do(context.TODO(), op); err != nil {
 			fmt.Println(err)
@@ -31,4 +34,13 @@ func mockTask() {
 	for _, kv := range getRsp.Kvs {
 		fmt.Println(string(kv.Key), ":", string(kv.Value))
 	}
+}
+
+func taskData(name string, path string) string {
+	details := task.TailTaskDetails{
+		AppKey:  name,
+		LogPath: path,
+	}
+	json, _ := json.Marshal(details)
+	return string(json)
 }
