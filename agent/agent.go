@@ -51,7 +51,7 @@ func (agent *logAgent) StartAgent() {
 	localIp := utils.LocalIpArray[0]
 	log.Infof("agent start is running bind ip %s....", localIp)
 	for true {
-		msg := task.GetOneLine()
+		msg := agent.tailTaskManger.GetOneLine()
 		err := agent.kafkaClient.SendMsg(msg.AppKey, kafka.LogContent{Ip: localIp, Msg: msg.Msg})
 		if err != nil {
 			log.Errorf("send msg:[%v] topic:[%v] failed, err:[%v]", msg.Msg, msg.AppKey, err)
