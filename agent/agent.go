@@ -25,9 +25,9 @@ type logAgent struct {
 func NewAgent(c *config.AgentConfig) (*logAgent, error) {
 	var err error
 	//1.初始化etcd
-	etcdClient, err := etcd.NewClient(c.EtcdAdrr)
+	etcdClient, err := etcd.NewClient(c.EtcdAddr)
 	if err != nil {
-		log.Fatalf("init etcd client %s failed...", c.EtcdAdrr)
+		log.Fatalf("init etcd client %s failed...", c.EtcdAddr)
 	}
 	//2.初始化producer
 	kafkaClient, err := kafka.NewKafkaClient(c.KafKaAddr)

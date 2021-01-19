@@ -19,7 +19,7 @@ type manageServer struct {
 	gin  *gin.Engine
 }
 
-func NewManageServer(c *config.ManagerServerConfig) (*manageServer, error) {
+func NewManageServer(c *config.ManagerConfig) (*manageServer, error) {
 	var err error
 	etcdClient, err := etcd.NewClient(c.EtcdAdrr)
 	if err != nil {

@@ -1,5 +1,0 @@
-debug: true
-agent:
-  etcd-addr: 10.231.50.28:22379
-  kafka-addr: 10.231.50.28:23310
-  chan-size: 1024
