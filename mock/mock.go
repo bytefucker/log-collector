@@ -3,10 +3,10 @@ package mock
 import (
 	"context"
 	"encoding/json"
-	"github.com/yihongzhi/log-collector/agent/task"
-
 	"fmt"
 	"github.com/coreos/etcd/clientv3"
+	"github.com/yihongzhi/log-collector/agent/task"
+	"github.com/yihongzhi/log-collector/common/utils"
 
 	"github.com/yihongzhi/log-collector/common/etcd"
 )
@@ -38,7 +38,7 @@ func mockTask() {
 
 func mockLocalTask() {
 	var err error
-	var key = "/log-collector/10.231.20.75/"
+	var key = "/log-collector/" + utils.LocalIpArray[0] + "/"
 	etcdClient, err := etcd.NewClient([]string{"10.231.50.28:5460"})
 
 	deleteResponse, err := etcdClient.Delete(context.TODO(), key, clientv3.WithPrefix())

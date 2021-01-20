@@ -5,7 +5,6 @@ import (
 	"github.com/yihongzhi/log-collector/common/etcd"
 	"github.com/yihongzhi/log-collector/common/kafka"
 	"github.com/yihongzhi/log-collector/common/logger"
-	"github.com/yihongzhi/log-collector/common/utils"
 	"github.com/yihongzhi/log-collector/config"
 	"time"
 )
@@ -48,11 +47,10 @@ func NewAgent(c *config.AgentConfig) (*logAgent, error) {
 }
 
 func (agent *logAgent) StartAgent() {
-	localIp := utils.LocalIpArray[0]
-	log.Infof("agent start is running bind ip %s....", localIp)
+	log.Infof("agent start is running bind ip %s....", agent.tailTaskManger.BindHost)
 	for true {
 		msg := agent.tailTaskManger.GetOneLine()
-		err := agent.kafkaClient.SendMsg(msg.AppKey, kafka.LogContent{Ip: localIp, Msg: msg.Msg})
+		err := agent.kafkaClient.SendMsg(msg.AppKey, kafka.LogContent{Ip: agent.tailTaskManger.BindHost, Msg: msg.Msg})
 		if err != nil {
 			log.Errorf("send msg:[%v] topic:[%v] failed, err:[%v]", msg.Msg, msg.AppKey, err)
 			time.Sleep(time.Second)
